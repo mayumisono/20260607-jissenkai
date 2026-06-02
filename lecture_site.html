@@ -1,0 +1,4176 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>はじめてのGASアプリ作成体験｜講義サイト</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      /* Sidebar */
+      --sidebar-bg: #0d0b14;
+      --sidebar-bg2: #151220;
+      --sidebar-border: rgba(165, 30, 109, 0.2);
+      --sidebar-active-bg: rgba(165, 30, 109, 0.12);
+      --sidebar-active-text: #e87ec0;
+      --sidebar-text: rgba(255, 255, 255, 0.5);
+      --sidebar-text-hover: rgba(255, 255, 255, 0.85);
+      --sidebar-section-label: rgba(255, 255, 255, 0.25);
+
+      /* Brand */
+      --brand: #A51E6D;
+      --brand-light: #d470aa;
+      --brand-9: #F6E9F0;
+      --brand-glow: 0 0 20px rgba(165, 30, 109, 0.25);
+      --teal: #039578;
+      --teal-9: #e6f4f2;
+      --purple: #7C3AED;
+      --purple-9: #ede9fe;
+
+      /* Main */
+      --cream: #faf8f5;
+      --paper: #ffffff;
+      --ink: #1a1714;
+      --ink-s: #4a4644;
+      --ink-m: #9a9490;
+      --rule: #e8e0da;
+      --rule-s: #f0ebe6;
+
+      /* Code */
+      --code-bg: #1e1e2e;
+      --code-bg2: #181825;
+      --code-gutter: #252538;
+
+      /* Gradients */
+      --accent-gradient: linear-gradient(135deg, #FF5757 0%, #8C52FF 100%);
+      --brand-gradient: linear-gradient(135deg, #A51E6D 0%, #D470AA 100%);
+      --teal-gradient: linear-gradient(135deg, #039578 0%, #35AA93 100%);
+      --purple-gradient: linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%);
+
+      --nav-w: 272px;
+      --r: 12px;
+      --r-lg: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.85;
+    }
+
+    /* ── Layout ── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--nav-w);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      /* subtle dot texture */
+      background-image:
+        radial-gradient(circle, rgba(165, 30, 109, 0.06) 1px, transparent 1px),
+        linear-gradient(180deg, var(--sidebar-bg) 0%, var(--sidebar-bg2) 100%);
+      background-size: 20px 20px, 100% 100%;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(165, 30, 109, 0.3);
+      border-radius: 2px;
+    }
+
+    .sidebar-logo {
+      padding: 0;
+      border-bottom: 1px solid var(--sidebar-border);
+    }
+
+    .sidebar-logo-bar {
+      height: 3px;
+      background: var(--brand-gradient);
+    }
+
+    .sidebar-logo-inner {
+      padding: 20px 20px 18px;
+    }
+
+    .sidebar-logo .site-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--brand-light);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      opacity: 0.85;
+    }
+
+    .sidebar-logo .site-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    nav {
+      flex: 1;
+      padding: 12px 0 8px;
+    }
+
+    .nav-section {
+      margin-bottom: 2px;
+    }
+
+    .nav-section-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--sidebar-section-label);
+      padding: 12px 18px 4px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 18px 8px 16px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--sidebar-text);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--sidebar-text-hover);
+      border-left-color: rgba(212, 112, 170, 0.4);
+    }
+
+    .nav-link.active {
+      background: var(--sidebar-active-bg);
+      color: var(--sidebar-active-text);
+      border-left-color: var(--brand-light);
+      font-weight: 700;
+      box-shadow: inset 0 0 20px rgba(165, 30, 109, 0.06);
+    }
+
+    .nav-link .nav-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      flex: none;
+      transition: all 0.15s ease;
+    }
+
+    .nav-link.active .nav-dot {
+      background: var(--brand-light);
+      box-shadow: 0 0 6px rgba(212, 112, 170, 0.6);
+    }
+
+    .nav-link:hover .nav-dot {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .nav-time {
+      margin-left: auto;
+      font-size: 10.5px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.2);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .sidebar-footer {
+      padding: 16px 18px;
+      border-top: 1px solid var(--sidebar-border);
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.22);
+      line-height: 1.6;
+    }
+
+    .sidebar-footer strong {
+      color: rgba(255, 255, 255, 0.38);
+      font-weight: 600;
+    }
+
+    /* ── Main ── */
+    .main {
+      margin-left: var(--nav-w);
+      flex: 1;
+      max-width: calc(var(--nav-w) + 860px);
+      padding: 0 52px 140px;
+      /* dot grid background */
+      background-image: radial-gradient(circle, rgba(190, 178, 168, 0.25) 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-color: var(--cream);
+      position: relative;
+    }
+
+    .main::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: var(--nav-w);
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, transparent 0%, var(--rule) 10%, var(--rule) 90%, transparent 100%);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* ── Hero Header ── */
+    .site-header {
+      padding: 72px 0 56px;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 72px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .site-header .hero-ghost {
+      position: absolute;
+      right: -20px;
+      top: -10px;
+      font-size: 220px;
+      font-weight: 700;
+      color: rgba(165, 30, 109, 0.03);
+      line-height: 1;
+      pointer-events: none;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.05em;
+      user-select: none;
+    }
+
+    .header-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      background: var(--brand-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .header-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      background: var(--brand-gradient);
+      -webkit-text-fill-color: unset;
+      border-radius: 1px;
+    }
+
+    .header-title {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+
+    .header-sub {
+      font-size: 16px;
+      color: var(--ink-m);
+      margin-bottom: 36px;
+      line-height: 1.7;
+    }
+
+    .goal-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .goal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: var(--brand-gradient);
+      border-radius: 999px;
+      padding: 9px 20px 9px 10px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(165, 30, 109, 0.25);
+    }
+
+    .goal-badge .num {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex: none;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── Section ── */
+    .section {
+      margin-bottom: 88px;
+      position: relative;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 44px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+    }
+
+    .section-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 80px;
+      height: 2px;
+      background: var(--brand-gradient);
+      border-radius: 1px;
+    }
+
+    .section-num-ghost {
+      position: absolute;
+      right: 0;
+      top: -28px;
+      font-size: 120px;
+      font-weight: 700;
+      color: rgba(165, 30, 109, 0.04);
+      line-height: 1;
+      pointer-events: none;
+      font-family: 'JetBrains Mono', monospace;
+      user-select: none;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #fff;
+    }
+
+    .section-tag.brand {
+      background: var(--brand-gradient);
+    }
+
+    .section-tag.teal {
+      background: var(--teal-gradient);
+    }
+
+    .section-tag.purple {
+      background: var(--purple-gradient);
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .section-time {
+      margin-left: auto;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-m);
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap;
+      background: var(--rule-s);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--rule);
+    }
+
+    /* ── Sub heading ── */
+    h3.sub {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 44px 0 18px;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    h3.sub::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 2px;
+      bottom: 2px;
+      width: 4px;
+      border-radius: 2px;
+      background: var(--brand-gradient);
+    }
+
+    /* ── Body text ── */
+    p.body {
+      font-size: 16px;
+      color: var(--ink-s);
+      line-height: 1.9;
+      margin-bottom: 16px;
+    }
+
+    /* ── Info cards ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 28px 0;
+    }
+
+    .info-card {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-top: 3px solid transparent;
+      border-top-color: transparent;
+      border-radius: var(--r);
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--brand-gradient);
+    }
+
+    .info-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .info-card.highlight::before {
+      background: var(--teal-gradient);
+    }
+
+    .info-card.highlight {
+      background: linear-gradient(135deg, var(--teal-9), var(--paper));
+      border-color: rgba(3, 149, 120, 0.3);
+    }
+
+    .info-card.dashed {
+      border-style: dashed;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .info-card.dashed::before {
+      display: none;
+    }
+
+    .info-card .ic-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      background: var(--brand-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .info-card.highlight .ic-num {
+      background: var(--teal-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .info-card .ic-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .info-card.highlight .ic-title {
+      color: var(--teal);
+    }
+
+    .info-card .ic-body {
+      font-size: 13.5px;
+      color: var(--ink-s);
+      line-height: 1.75;
+    }
+
+    /* ── Bullet list ── */
+    .bul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .bul li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 16px;
+      color: var(--ink-s);
+      line-height: 1.75;
+    }
+
+    .bul li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--brand-gradient);
+      flex: none;
+      margin-top: 10px;
+      box-shadow: 0 0 6px rgba(165, 30, 109, 0.3);
+    }
+
+    .bul li strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    /* ── Flow diagram ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: var(--r-lg);
+      padding: 32px 28px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.04);
+      margin: 28px 0;
+      overflow-x: auto;
+      gap: 0;
+    }
+
+    .flow-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      min-width: 136px;
+      text-align: center;
+    }
+
+    .flow-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      background: var(--brand-9);
+      border: 1px solid rgba(165, 30, 109, 0.15);
+      box-shadow: 0 2px 8px rgba(165, 30, 109, 0.08);
+    }
+
+    .flow-node.accent .flow-icon {
+      background: var(--brand-gradient);
+      font-size: 26px;
+      border: none;
+      box-shadow: 0 4px 16px rgba(165, 30, 109, 0.3);
+    }
+
+    .flow-label {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .flow-sub {
+      font-size: 11.5px;
+      color: var(--ink-m);
+    }
+
+    .flow-arrow {
+      flex: none;
+      padding: 0 14px;
+      color: var(--brand);
+      font-size: 18px;
+      font-weight: 700;
+      opacity: 0.6;
+    }
+
+    .flow-parts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .flow-part {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-top: 3px solid var(--rule);
+      border-radius: var(--r);
+      padding: 22px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .flow-part:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .flow-part.fp-highlight {
+      border-top-color: transparent;
+      position: relative;
+      background: linear-gradient(135deg, var(--brand-9), var(--paper));
+      border-color: rgba(165, 30, 109, 0.2);
+    }
+
+    .flow-part.fp-highlight::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--brand-gradient);
+      border-radius: var(--r) var(--r) 0 0;
+    }
+
+    .flow-part .fp-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--ink-m);
+      margin-bottom: 8px;
+    }
+
+    .flow-part.fp-highlight .fp-num {
+      background: var(--brand-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .flow-part .fp-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .flow-part .fp-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .flow-part.fp-highlight .fp-title {
+      color: var(--brand);
+    }
+
+    .flow-part .fp-desc {
+      font-size: 12.5px;
+      color: var(--ink-m);
+      line-height: 1.55;
+    }
+
+    /* ── Keyword cards ── */
+    .kw-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 28px 0;
+    }
+
+    .kw-card {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-top: 3px solid transparent;
+      border-radius: var(--r);
+      padding: 22px 26px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.03);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .kw-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--brand-gradient);
+    }
+
+    .kw-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
+    }
+
+    .kw-card .kw-term {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      background: var(--brand-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .kw-card .kw-desc {
+      font-size: 15px;
+      color: var(--ink-s);
+      line-height: 1.75;
+    }
+
+    .kw-card .kw-eg {
+      font-size: 13px;
+      color: var(--ink-m);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--rule-s);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── Step block ── */
+    .step-block {
+      margin: 32px 0;
+      border: 1px solid var(--rule);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    .step-block::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--teal-gradient);
+      border-radius: var(--r-lg) 0 0 var(--r-lg);
+    }
+
+    .step-block.purple-accent::before {
+      background: var(--purple-gradient);
+    }
+
+    .step-block:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 24px 18px 28px;
+      background: var(--cream);
+      border-bottom: 1px solid var(--rule-s);
+    }
+
+    .step-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      flex: none;
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--teal-gradient);
+      box-shadow: 0 4px 12px rgba(3, 149, 120, 0.3);
+    }
+
+    .step-num.purple {
+      background: var(--purple-gradient);
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    }
+
+    .step-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .step-time {
+      margin-left: auto;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--ink-m);
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--rule-s);
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--rule);
+      white-space: nowrap;
+    }
+
+    .step-body {
+      padding: 26px 26px 26px 28px;
+    }
+
+    .step-desc {
+      font-size: 15px;
+      color: var(--ink-s);
+      line-height: 1.85;
+      margin-bottom: 20px;
+    }
+
+    /* ── Procedure list ── */
+    .proc {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 16px 0;
+    }
+
+    .proc li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--rule-s);
+      font-size: 15px;
+      color: var(--ink-s);
+      line-height: 1.75;
+    }
+
+    .proc li:last-child {
+      border-bottom: none;
+    }
+
+    .proc li .pnum {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--teal-9);
+      border: 1px solid var(--teal);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--teal);
+      flex: none;
+      margin-top: 1px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .proc li .pnum.purple {
+      background: var(--purple-9);
+      border-color: var(--purple);
+      color: var(--purple);
+    }
+
+    .proc li strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .arrow-step {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: var(--rule-s);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 12px 0;
+      font-size: 13.5px;
+      border: 1px solid var(--rule);
+    }
+
+    .arrow-step .as {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 7px;
+      padding: 5px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .arrow-step .ar {
+      color: var(--brand);
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    /* ── Code block ── */
+    .code-wrap {
+      position: relative;
+      margin: 18px 0;
+      border-radius: var(--r);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      background: #2a2a3c;
+      padding: 11px 16px;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .traffic-lights {
+      display: flex;
+      gap: 7px;
+      flex: none;
+    }
+
+    .tl {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+    }
+
+    .tl-red {
+      background: #ff5f57;
+    }
+
+    .tl-yellow {
+      background: #febc2e;
+    }
+
+    .tl-green {
+      background: #28c840;
+    }
+
+    .code-lang {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.12em;
+      flex: 1;
+      text-align: center;
+    }
+
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: rgba(255, 255, 255, 0.65);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.06em;
+      flex: none;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+
+    .copy-btn.copied {
+      background: rgba(3, 149, 120, 0.3);
+      border-color: rgba(3, 149, 120, 0.5);
+      color: #6be9d1;
+    }
+
+    pre {
+      background: var(--code-bg);
+      padding: 22px 22px;
+      overflow-x: auto;
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      line-height: 1.8;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Catppuccin-inspired */
+    .c-comment {
+      color: #6272a4;
+      font-style: italic;
+    }
+
+    .c-kw {
+      color: #ff79c6;
+    }
+
+    .c-fn {
+      color: #50fa7b;
+    }
+
+    .c-str {
+      color: #f1fa8c;
+    }
+
+    .c-var {
+      color: #8be9fd;
+    }
+
+    .c-w {
+      color: #f8f8f2;
+    }
+
+    .c-hl {
+      background: rgba(255, 200, 80, 0.1);
+      border-left: 3px solid #e0b040;
+      padding-left: 6px;
+      margin-left: -6px;
+      display: inline-block;
+      width: calc(100% + 6px);
+      border-radius: 0 3px 3px 0;
+    }
+
+    /* ── Change map callout ── */
+    .change-map {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-left: 4px solid var(--brand);
+      border-radius: var(--r);
+      padding: 20px 24px;
+      margin: 18px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .change-map::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--brand-gradient);
+      border-radius: var(--r) 0 0 var(--r);
+    }
+
+    .change-map .cm-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      background: var(--brand-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 14px;
+    }
+
+    .change-map .cm-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .change-map .cm-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--ink-s);
+    }
+
+    .change-map .cm-badge {
+      background: var(--brand-gradient);
+      color: #fff;
+      border-radius: 999px;
+      padding: 2px 11px;
+      font-size: 11px;
+      font-weight: 700;
+      flex: none;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── Success banner ── */
+    .success-banner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: linear-gradient(135deg, rgba(165, 30, 109, 0.07), rgba(212, 112, 170, 0.05));
+      border: 1.5px solid rgba(165, 30, 109, 0.25);
+      border-radius: var(--r-lg);
+      padding: 22px 26px;
+      margin: 18px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .success-banner::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        left: -100%;
+      }
+
+      100% {
+        left: 200%;
+      }
+    }
+
+    .success-icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      background: var(--brand-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex: none;
+      box-shadow: 0 6px 20px rgba(165, 30, 109, 0.3);
+    }
+
+    .success-text .st {
+      font-size: 19px;
+      font-weight: 700;
+      background: var(--brand-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+
+    .success-text .ss {
+      font-size: 14px;
+      color: var(--ink-s);
+      line-height: 1.7;
+    }
+
+    /* ── Mapping form ── */
+    .mapping-form {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      margin: 18px 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .mf-header {
+      padding: 14px 24px;
+      background: var(--brand-gradient);
+    }
+
+    .mf-header .mf-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .mf-body {
+      padding: 24px;
+    }
+
+    .mapping-field {
+      margin-bottom: 20px;
+    }
+
+    .mapping-field:last-child {
+      margin-bottom: 0;
+    }
+
+    .mapping-field label {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 7px;
+    }
+
+    .mapping-field .field-line {
+      border: none;
+      border-bottom: 2px solid var(--rule);
+      background: transparent;
+      width: 100%;
+      padding: 9px 4px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 15px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .mapping-field .field-line:focus {
+      border-bottom-color: var(--brand);
+    }
+
+    .mapping-field .field-line::placeholder {
+      color: var(--ink-m);
+      font-size: 14px;
+    }
+
+    /* ── Step indicator (Part 2) ── */
+    .step-indicator {
+      display: flex;
+      align-items: flex-start;
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-top: 3px solid transparent;
+      border-radius: var(--r-lg);
+      padding: 28px 24px 22px;
+      margin: 28px 0;
+      overflow-x: auto;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.03);
+      position: relative;
+    }
+
+    .step-indicator::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--purple-gradient);
+      border-radius: var(--r-lg) var(--r-lg) 0 0;
+    }
+
+    .si-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 72px;
+      text-align: center;
+      position: relative;
+    }
+
+    .si-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: calc(50% + 22px);
+      right: calc(-50% + 22px);
+      height: 2px;
+      background: var(--rule);
+      transition: background 0.3s ease;
+    }
+
+    .si-item.done:not(:last-child)::after {
+      background: var(--purple-gradient);
+    }
+
+    .si-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: var(--rule-s);
+      border: 2px solid var(--rule);
+      color: var(--ink-m);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      position: relative;
+      z-index: 1;
+      transition: all 0.25s ease;
+    }
+
+    .si-dot.done {
+      background: var(--purple-gradient);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+    }
+
+    .si-dot.active-pulse {
+      animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 0 8px rgba(124, 58, 237, 0);
+      }
+    }
+
+    .si-label {
+      font-size: 10.5px;
+      color: var(--ink-m);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    /* ── URL placeholder ── */
+    .url-placeholder {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--paper);
+      border: 2px dashed var(--rule);
+      border-radius: var(--r);
+      padding: 16px 20px;
+      margin: 14px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      color: var(--ink-m);
+      transition: border-color 0.2s;
+      position: relative;
+    }
+
+    .url-placeholder .url-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--brand);
+      flex: none;
+      animation: pulse-dot 2s infinite;
+      box-shadow: 0 0 0 0 rgba(165, 30, 109, 0.4);
+    }
+
+    @keyframes pulse-dot {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(165, 30, 109, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 0 6px rgba(165, 30, 109, 0);
+      }
+    }
+
+    /* ── Notice box ── */
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--teal-9);
+      border: 1px solid rgba(3, 149, 120, 0.25);
+      border-left: 4px solid transparent;
+      border-radius: var(--r);
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: var(--ink-s);
+      line-height: 1.75;
+      position: relative;
+    }
+
+    .notice::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--teal-gradient);
+      border-radius: var(--r) 0 0 var(--r);
+    }
+
+    .notice .ni-wrap {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: var(--teal-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex: none;
+      box-shadow: 0 3px 10px rgba(3, 149, 120, 0.25);
+    }
+
+    /* ── Inline code ── */
+    .ic {
+      background: var(--rule-s);
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--brand);
+      border: 1px solid var(--rule);
+    }
+
+    /* ── Fade-up animation ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      background: var(--sidebar-bg);
+      border-radius: var(--r-lg);
+      padding: 52px 48px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .site-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--brand-gradient);
+    }
+
+    .footer-ghost {
+      position: absolute;
+      right: -20px;
+      bottom: -30px;
+      font-size: 180px;
+      font-weight: 700;
+      color: rgba(165, 30, 109, 0.05);
+      line-height: 1;
+      pointer-events: none;
+      font-family: 'JetBrains Mono', monospace;
+      user-select: none;
+    }
+
+    .footer-title {
+      font-size: clamp(26px, 3vw, 36px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-sub {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-form-url {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(165, 30, 109, 0.4);
+      border-radius: var(--r);
+      padding: 14px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      color: rgba(255, 255, 255, 0.45);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-note {
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.25);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Submission & Gallery ── */
+    .submit-section {
+      background: var(--sidebar-bg);
+      border-radius: var(--r-lg);
+      padding: 48px 40px 44px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .submit-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--brand-gradient);
+    }
+
+    .submit-eyebrow {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .18em;
+      font-weight: 700;
+      color: #ff7eb6;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(255, 126, 182, 0.08);
+      border: 1px solid rgba(255, 126, 182, 0.25);
+      margin-bottom: 14px;
+    }
+
+    .submit-title {
+      font-size: clamp(22px, 2.6vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      letter-spacing: -.02em;
+    }
+
+    .submit-sub {
+      font-size: 14.5px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 28px;
+      line-height: 1.7;
+    }
+
+    .submit-form {
+      display: grid;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--r);
+      padding: 24px;
+      margin-bottom: 36px;
+    }
+
+    .submit-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .submit-label {
+      white-space: nowrap;
+    }
+
+    .submit-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      padding-top: 11px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .submit-label .req {
+      font-size: 10px;
+      color: #ff7eb6;
+      background: rgba(255, 126, 182, 0.12);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .submit-label .opt {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.4);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .submit-input,
+    .submit-textarea {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 14px;
+      color: #fff;
+      font-family: inherit;
+      transition: border-color .15s, background .15s;
+      outline: none;
+    }
+
+    .submit-input:focus,
+    .submit-textarea:focus {
+      border-color: #ff7eb6;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .submit-input::placeholder,
+    .submit-textarea::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .submit-textarea {
+      resize: vertical;
+      min-height: 64px;
+      line-height: 1.6;
+    }
+
+    .submit-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    .submit-status {
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.4);
+      flex: 1;
+    }
+
+    .submit-status.success {
+      color: #7ef5b0;
+    }
+
+    .submit-status.error {
+      color: #ff8a8a;
+    }
+
+    .submit-btn {
+      background: var(--brand-gradient);
+      color: #fff;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 12px 28px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform .15s, box-shadow .15s, opacity .15s;
+      box-shadow: 0 4px 14px rgba(165, 30, 109, 0.4);
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(165, 30, 109, 0.5);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Gallery */
+    .gallery-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .gallery-heading {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gallery-count {
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(255, 126, 182, 0.12);
+      color: #ff7eb6;
+      border: 1px solid rgba(255, 126, 182, 0.25);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .gallery-refresh {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+
+    .gallery-refresh:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .gallery-refresh.spinning svg {
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .gallery-empty {
+      text-align: center;
+      padding: 48px 20px;
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 14px;
+      border: 2px dashed rgba(255, 255, 255, 0.08);
+      border-radius: var(--r);
+    }
+
+    .gallery-empty .emoji {
+      font-size: 32px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .gal-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform .18s, border-color .18s, background .18s;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .gal-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 126, 182, 0.45);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .gal-card::after {
+      content: '↗';
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.25);
+      transition: color .18s, transform .18s;
+    }
+
+    .gal-card:hover::after {
+      color: #ff7eb6;
+      transform: translate(2px, -2px);
+    }
+
+    .gal-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gal-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--brand-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .gal-nickname {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .gal-time {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.35);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .gal-comment {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.65);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 20px;
+    }
+
+    .gal-url-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #ff7eb6;
+      background: rgba(255, 126, 182, 0.08);
+      border: 1px solid rgba(255, 126, 182, 0.18);
+      padding: 4px 10px;
+      border-radius: 999px;
+      align-self: flex-start;
+      margin-top: auto;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @media (max-width:640px) {
+      .submit-section {
+        padding: 36px 22px 32px;
+      }
+
+      .submit-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .submit-label {
+        padding-top: 0;
+      }
+    }
+
+    /* ── Scenario hook ── */
+    .scenario-hook {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: var(--r-lg);
+      padding: 32px 36px;
+      margin-bottom: 56px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scenario-hook::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--brand-gradient);
+    }
+
+    .scenario-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-m);
+      margin-bottom: 20px;
+    }
+
+    .scenario-boss {
+      margin-bottom: 16px;
+    }
+
+    .scenario-bubble {
+      background: var(--brand-9);
+      border: 1px solid rgba(165, 30, 109, 0.2);
+      border-radius: 0 var(--r) var(--r) var(--r);
+      padding: 16px 20px;
+      position: relative;
+      margin-left: 64px;
+    }
+
+    .scenario-speaker,
+    .scenario-you {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--ink-m);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .scenario-speaker {
+      margin-left: 64px;
+      margin-bottom: 4px;
+    }
+
+    .scenario-text {
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--ink);
+    }
+
+    .scenario-reaction {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      margin: 12px 0 24px;
+    }
+
+    .scenario-you {
+      margin-right: 0;
+      margin-bottom: 4px;
+    }
+
+    .scenario-think {
+      background: var(--neutral-9);
+      border: 1px solid var(--rule);
+      border-radius: var(--r) 0 var(--r) var(--r);
+      padding: 12px 18px;
+      font-size: 15px;
+      color: var(--ink-s);
+      line-height: 1.7;
+      max-width: 80%;
+    }
+
+    .scenario-answer {
+      background: linear-gradient(135deg, rgba(165, 30, 109, 0.06), rgba(124, 58, 237, 0.04));
+      border: 1.5px solid rgba(165, 30, 109, 0.2);
+      border-radius: var(--r);
+      padding: 20px 24px;
+      margin: 0 0 28px;
+    }
+
+    .sa-ok {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 8px;
+    }
+
+    .sa-desc {
+      font-size: 15px;
+      color: var(--ink-s);
+      line-height: 1.8;
+    }
+
+    .scenario-decompose {
+      margin-top: 4px;
+    }
+
+    .sd-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-m);
+      margin-bottom: 16px;
+    }
+
+    .sd-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .sd-item {
+      border: 1.5px solid var(--rule);
+      border-radius: var(--r);
+      padding: 20px;
+      background: var(--paper);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .sd-item.today {
+      border-color: rgba(3, 149, 120, 0.3);
+    }
+
+    .sd-item.extra {
+      border-style: dashed;
+    }
+
+    .sd-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 3px 10px;
+      margin-bottom: 12px;
+    }
+
+    .today-tag {
+      background: var(--teal-9);
+      color: var(--teal);
+    }
+
+    .extra-tag {
+      background: var(--purple-9);
+      color: var(--purple);
+    }
+
+    .sd-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .sd-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .sd-desc {
+      font-size: 13px;
+      color: var(--ink-s);
+      line-height: 1.65;
+      margin-bottom: 10px;
+    }
+
+    .sd-key {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--brand);
+      background: var(--brand-9);
+      border-radius: 6px;
+      padding: 4px 10px;
+      display: inline-block;
+    }
+
+    .sd-item.extra .sd-key {
+      color: var(--purple);
+      background: var(--purple-9);
+    }
+
+    @media(max-width:900px) {
+      .sd-items {
+        grid-template-columns: 1fr;
+      }
+
+      .scenario-bubble,
+      .scenario-speaker {
+        margin-left: 0;
+      }
+    }
+
+    /* ── Think framework ── */
+    .think-framework {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-top: 3px solid var(--brand);
+      border-radius: var(--r);
+      padding: 24px 28px;
+      margin: 32px 0;
+    }
+
+    .tf-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brand);
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+
+    .tf-steps {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tf-step {
+      flex: 1;
+      min-width: 180px;
+      background: var(--cream);
+      border-radius: var(--r);
+      padding: 16px;
+    }
+
+    .tf-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--brand);
+      letter-spacing: 0.14em;
+      margin-bottom: 8px;
+    }
+
+    .tf-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .tf-desc {
+      font-size: 13px;
+      color: var(--ink-s);
+      line-height: 1.65;
+    }
+
+    .tf-arrow {
+      font-size: 20px;
+      color: var(--brand);
+      font-weight: 700;
+      padding-top: 20px;
+      flex: none;
+    }
+
+    @media(max-width:900px) {
+      .tf-steps {
+        flex-direction: column;
+      }
+
+      .tf-arrow {
+        transform: rotate(90deg);
+        padding: 0;
+        align-self: center;
+      }
+    }
+
+    /* ── Step why ── */
+    .step-why {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--cream);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      color: var(--ink-s);
+      line-height: 1.65;
+      border-left: 3px solid var(--rule);
+    }
+
+    .step-why .sw-icon {
+      font-size: 15px;
+      flex: none;
+      margin-top: 1px;
+    }
+
+    .step-why strong {
+      color: var(--ink);
+    }
+
+    /* ── Gemini prompt section ── */
+    .gemini-how {
+      background: var(--purple-9);
+      border: 1px solid rgba(124, 58, 237, 0.18);
+      border-radius: var(--r);
+      padding: 20px 24px;
+      margin: 20px 0 28px;
+    }
+
+    .gh-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 16px;
+    }
+
+    .gh-steps {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .gh-step {
+      flex: 1;
+      min-width: 160px;
+      background: var(--paper);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13.5px;
+      color: var(--ink-s);
+      line-height: 1.6;
+    }
+
+    .gh-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--purple);
+      background: var(--purple-9);
+      border-radius: 999px;
+      padding: 2px 8px;
+      flex: none;
+      margin-top: 2px;
+    }
+
+    .gh-arrow {
+      font-size: 18px;
+      color: var(--purple);
+      font-weight: 700;
+      padding-top: 16px;
+      flex: none;
+    }
+
+    /* Gemini プロンプトブロック */
+    .prompt-wrap {
+      position: relative;
+      margin: 12px 0;
+      border-radius: var(--r);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+
+    .prompt-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #2d1f52;
+      padding: 10px 16px;
+    }
+
+    .prompt-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .pd {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      flex: none;
+    }
+
+    .pd-r {
+      background: #ff5f57;
+    }
+
+    .pd-y {
+      background: #febc2e;
+    }
+
+    .pd-g {
+      background: #28c840;
+    }
+
+    .prompt-label {
+      flex: 1;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.06em;
+    }
+
+    .prompt-pre {
+      background: #1a1030;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      line-height: 1.85;
+      color: #e2d9f3;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    @media(max-width:900px) {
+      .gh-steps {
+        flex-direction: column;
+      }
+
+      .gh-arrow {
+        transform: rotate(90deg);
+        padding: 0;
+        align-self: center;
+      }
+    }
+
+    /* ── Gamification ── */
+
+    /* 完了ボタン */
+    .complete-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 20px;
+      padding: 9px 18px;
+      background: transparent;
+      border: 1.5px solid var(--rule);
+      border-radius: 999px;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-m);
+      letter-spacing: 0.04em;
+      transition: all 0.2s ease;
+    }
+
+    .complete-btn:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-9);
+    }
+
+    .complete-btn .cb-icon {
+      font-size: 15px;
+      transition: transform 0.3s ease;
+    }
+
+    .complete-btn.done {
+      background: var(--teal-9);
+      border-color: var(--teal);
+      color: var(--teal);
+      pointer-events: none;
+    }
+
+    .complete-btn.done .cb-icon {
+      transform: scale(1.2);
+    }
+
+    /* ステップ完了済みスタイル */
+    .step-block.completed .step-header {
+      background: linear-gradient(90deg, rgba(3, 149, 120, 0.06) 0%, transparent 80%);
+    }
+
+    .step-block.completed .step-num {
+      background: var(--teal-gradient) !important;
+    }
+
+    .step-header-check {
+      margin-left: auto;
+      font-size: 18px;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .step-block.completed .step-header-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* サイドバー進捗ピル */
+    .progress-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(3, 149, 120, 0.12);
+      border: 1px solid rgba(3, 149, 120, 0.25);
+      border-radius: 999px;
+      padding: 6px 12px;
+      margin-bottom: 12px;
+    }
+
+    .progress-pill .pp-bar-wrap {
+      flex: 1;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-pill .pp-bar {
+      height: 100%;
+      background: var(--teal-gradient);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .progress-pill .pp-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: rgba(3, 149, 120, 0.9);
+      white-space: nowrap;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* トースト通知 */
+    #toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 999;
+      background: #0d0b14;
+      border: 1px solid rgba(3, 149, 120, 0.4);
+      border-radius: 12px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+    }
+
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    #toast .toast-icon {
+      font-size: 18px;
+    }
+
+    #toast .toast-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    #toast .toast-sub {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 1px;
+    }
+
+    /* 紙吹雪キャンバス */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    /* ── Mobile top nav ── */
+    .mobile-nav {
+      display: none;
+    }
+
+    @media(max-width:900px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 0 20px 80px;
+        background-image: none;
+      }
+
+      .main::before {
+        display: none;
+      }
+
+      .mobile-nav {
+        display: flex;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: var(--sidebar-bg);
+        border-bottom: 1px solid var(--sidebar-border);
+        padding: 0 12px;
+        overflow-x: auto;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .mobile-nav a {
+        flex: none;
+        padding: 13px 14px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--sidebar-text);
+        text-decoration: none;
+        white-space: nowrap;
+        border-bottom: 2px solid transparent;
+        transition: all 0.15s;
+      }
+
+      .mobile-nav a.active {
+        color: var(--sidebar-active-text);
+        border-bottom-color: var(--brand-light);
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .flow {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .flow-arrow {
+        transform: rotate(90deg);
+      }
+
+      .flow-parts {
+        grid-template-columns: 1fr;
+      }
+
+      .header-title {
+        font-size: clamp(26px, 6vw, 36px);
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+
+      .step-title {
+        font-size: 16px;
+      }
+
+      .site-header {
+        padding: 48px 0 36px;
+      }
+
+      .main .site-header,
+      .main section,
+      .main footer {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Mobile top nav -->
+  <nav class="mobile-nav" id="mobile-nav">
+    <a href="#intro">はじめに</a>
+    <a href="#gas">GASとは</a>
+    <a href="#part1">Part 1</a>
+    <a href="#part2">Part 2</a>
+    <a href="#advanced">発展</a>
+  </nav>
+
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-bar"></div>
+        <div class="sidebar-logo-inner">
+          <div class="site-label">GAS実践会 2026.06.07</div>
+          <div class="site-title">一度作れば、あとは自動。<br />はじめてのGASアプリ作成体験</div>
+        </div>
+      </div>
+      <nav>
+        <div class="nav-section">
+          <div class="nav-section-label">イントロ</div>
+          <a class="nav-link" href="#intro"><span class="nav-dot"></span>本日のゴール</a>
+          <a class="nav-link" href="#scenario"><span class="nav-dot"></span>今日学ぶ理由</a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Section 1 — GASとは？</div>
+          <a class="nav-link" href="#gas-what"><span class="nav-dot"></span>GASって何？</a>
+          <a class="nav-link" href="#gas-can"><span class="nav-dot"></span>GASでできること</a>
+          <a class="nav-link" href="#gas-arch"><span class="nav-dot"></span>全体構造</a>
+          <a class="nav-link" href="#gas-gemini"><span class="nav-dot"></span>Geminiを使う</a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Section 2 — Part 1 基礎（25分）</div>
+          <a class="nav-link" href="#p1s1"><span class="nav-dot"></span>Step 1 エディタを開く</a>
+          <a class="nav-link" href="#p1s2"><span class="nav-dot"></span>Step 2 初めての実行</a>
+          <a class="nav-link" href="#p1s3"><span class="nav-dot"></span>Step 3 シートを読む</a>
+          <a class="nav-link" href="#p1s4"><span class="nav-dot"></span>Step 4 ブラウザに表示</a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">Section 3 — Part 2 本番（55分）</div>
+          <a class="nav-link" href="#p2s1"><span class="nav-dot"></span>Step 1 テンプレをコピー</a>
+          <a class="nav-link" href="#p2s2"><span class="nav-dot"></span>Step 2 コードを確認</a>
+          <a class="nav-link" href="#p2s3"><span class="nav-dot"></span>Step 3 デプロイ</a>
+          <a class="nav-link" href="#p2s4"><span class="nav-dot"></span>Step 4 動作確認</a>
+          <a class="nav-link" href="#p2s5"><span class="nav-dot"></span>Step 5 業務マッピング</a>
+          <a class="nav-link" href="#p2s6"><span class="nav-dot"></span>Step 6 カスタマイズ</a>
+          <a class="nav-link" href="#p2s7"><span class="nav-dot"></span>Step 7 自動更新を体験</a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">発展</div>
+          <a class="nav-link" href="#advanced"><span class="nav-dot"></span>もっとできること</a>
+          <a class="nav-link" href="#adv-mail"><span class="nav-dot"></span>メール自動送信</a>
+          <a class="nav-link" href="#adv-clasp"><span class="nav-dot"></span>Clasp 入門</a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">提出 &amp; 共有</div>
+          <a class="nav-link" href="#submit"><span class="nav-dot"></span>作品を提出する</a>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="progress-pill">
+          <div class="pp-bar-wrap">
+            <div class="pp-bar" id="progress-bar"></div>
+          </div>
+          <span class="pp-label" id="progress-label">0 / 11</span>
+        </div>
+        <strong>詰まったら手を上げてください。</strong><br />サポート講師が巡回しています。
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+
+      <!-- Hero Header -->
+      <header class="site-header" id="intro">
+        <div class="hero-ghost">GAS</div>
+        <div class="header-eyebrow">HANDS-ON WORKSHOP · 2026.06.07</div>
+        <h1 class="header-title">一度作れば、あとは自動。<br />はじめてのGASアプリ作成体験</h1>
+        <p class="header-sub">〜スプレッドシートを活かす「自動化の仕組み」を0から作る〜</p>
+        <div class="goal-list">
+          <span class="goal-badge"><span class="num">1</span>仕組みが頭に入る</span>
+          <span class="goal-badge"><span class="num">2</span>自分の手でデプロイできた</span>
+          <span class="goal-badge"><span class="num">3</span>翌日から使えるイメージで持ち帰る</span>
+        </div>
+      </header>
+
+      <!-- Scenario hook -->
+      <div class="scenario-hook fade-up" id="scenario">
+        <div class="scenario-boss">
+          <div class="scenario-label">📋 こんな場面、ありませんか？</div>
+          <div class="scenario-bubble">
+            <div class="scenario-speaker">上司</div>
+            <div class="scenario-text">「参加者が当日わかりやすいように資料を作っておいて。それと、研修が終わったらアンケートも取って。答えてくれた人にはお礼のメールも忘れないように。」</div>
+          </div>
+        </div>
+        <div class="scenario-reaction">
+          <div class="scenario-you">あなた</div>
+          <div class="scenario-think">…資料・アンケート・お礼メール、全部やるんですか？</div>
+        </div>
+        <div class="scenario-answer">
+          <div class="sa-inner">
+            <div class="sa-ok">大丈夫です。</div>
+            <div class="sa-desc"><strong>GAS
+                があれば、これ全部できます。</strong><br />今日はその第一歩として、スプレッドシートのデータをWebページで見せる仕組みを一緒に作ります。</div>
+          </div>
+        </div>
+        <div class="scenario-decompose">
+          <div class="sd-label">頼まれた仕事を分解してみる</div>
+          <div class="sd-items">
+            <div class="sd-item today">
+              <div class="sd-tag today-tag">今日やること</div>
+              <div class="sd-icon">📊</div>
+              <div class="sd-title">データをWebで見える化</div>
+              <div class="sd-desc">スプレッドシートのアンケート結果を、URLを開くだけで誰でも見られるダッシュボードにする</div>
+              <div class="sd-key">SpreadsheetApp + doGet + HtmlService</div>
+            </div>
+            <div class="sd-item extra">
+              <div class="sd-tag extra-tag">発展</div>
+              <div class="sd-icon">✉️</div>
+              <div class="sd-title">お礼メールを自動送信</div>
+              <div class="sd-desc">スプレッドシートのメールアドレス一覧に、1行のコードでまとめてメールを送れる</div>
+              <div class="sd-key">MailApp.sendEmail()</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 1: GASとは？ -->
+      <section class="section" id="gas">
+        <div class="section-header">
+          <div class="section-num-ghost">01</div>
+          <span class="section-tag brand">Section 1</span>
+          <h2 class="section-title">GASとは？</h2>
+          <span class="section-time">15 min</span>
+        </div>
+
+        <h3 class="sub" id="gas-what">GASって何？</h3>
+        <p class="body">GAS（Google Apps Script）は、Googleのサービスを自動化・連携できるプログラミング言語です。</p>
+        <ul class="bul">
+          <li><strong>Google Apps Script</strong> の略</li>
+          <li>Googleアカウントがあれば<strong>今日から無料で使える</strong>。サーバーも不要</li>
+          <li>JavaScriptベースなので、わからないことはAIや検索で調べながら書ける</li>
+          <li>スプレッドシート・フォーム・Gmail・カレンダーなどと<strong>自由に連携できる</strong></li>
+        </ul>
+
+        <h3 class="sub" id="gas-can">GASでできること</h3>
+        <div class="info-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="info-card fade-up">
+            <div class="ic-num">EXAMPLE 01</div>
+            <div class="ic-title">✉️ メール自動送信</div>
+            <div class="ic-body">アンケートに回答してくれた人へ、お礼メールをスプレッドシートから一斉送信する</div>
+          </div>
+          <div class="info-card highlight fade-up">
+            <div class="ic-num">EXAMPLE 02 ← 今日やること</div>
+            <div class="ic-title">🌐 自動集計 &amp; Webページ公開</div>
+            <div class="ic-body">毎月の売上データをスプレッドシートで自動計算し、URLを開くだけで見られるWebページとして公開する</div>
+          </div>
+          <div class="info-card fade-up">
+            <div class="ic-num">EXAMPLE 03</div>
+            <div class="ic-title">📅 カレンダー連携</div>
+            <div class="ic-body">スプレッドシートに入力したイベント情報を、Googleカレンダーに自動で一括登録する</div>
+          </div>
+        </div>
+
+        <h3 class="sub" id="gas-arch">今日作るものの全体構造</h3>
+        <div class="flow fade-up">
+          <div class="flow-node">
+            <div class="flow-icon">📝</div>
+            <div class="flow-label">Googleフォーム</div>
+            <div class="flow-sub">アンケートに回答</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node">
+            <div class="flow-icon">📊</div>
+            <div class="flow-label">スプレッドシート</div>
+            <div class="flow-sub">回答が自動でたまる</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node accent">
+            <div class="flow-icon">⚙️</div>
+            <div class="flow-label">GASコード</div>
+            <div class="flow-sub">データを処理する</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node">
+            <div class="flow-icon">🌐</div>
+            <div class="flow-label">Webダッシュボード</div>
+            <div class="flow-sub">ブラウザで誰でも見られる</div>
+          </div>
+        </div>
+        <p class="body" style="margin-top:8px;font-size:14px;color:var(--ink-m);">3つのパーツで構成されています：</p>
+        <div class="flow-parts">
+          <div class="flow-part fade-up">
+            <div class="fp-num">PART 01</div>
+            <div class="fp-icon">📊</div>
+            <div class="fp-title">スプレッドシート</div>
+            <div class="fp-desc">データの保管場所。アンケートの回答が行として並ぶ</div>
+          </div>
+          <div class="flow-part fp-highlight fade-up">
+            <div class="fp-num">PART 02</div>
+            <div class="fp-icon">⚙️</div>
+            <div class="fp-title">GASコード</div>
+            <div class="fp-desc">処理エンジン。シートを読んでHTMLにデータを渡す</div>
+          </div>
+          <div class="flow-part fade-up">
+            <div class="fp-num">PART 03</div>
+            <div class="fp-icon">📄</div>
+            <div class="fp-title">HTMLファイル</div>
+            <div class="fp-desc">画面デザイン。ブラウザに表示されるページのレイアウト</div>
+          </div>
+        </div>
+
+        <h3 class="sub" id="gas-gemini">Geminiにコードを作ってもらう</h3>
+        <p class="body">
+          コードを全部書けなくても大丈夫です。<strong>やりたいことを日本語で伝えるだけで、GeminiがGASのコードを生成してくれます。</strong>今日のハンズオンでも、コピーしてそのまま使えるプロンプトを用意しました。
+        </p>
+
+        <div class="gemini-how fade-up">
+          <div class="gh-label">Gemini への伝え方 — 3ステップ</div>
+          <div class="gh-steps">
+            <div class="gh-step"><span class="gh-num">01</span>
+              <div><strong>状況を説明する</strong><br /><span>「こんなスプレッドシートがある」「こんな画面を作りたい」など、背景を伝える</span></div>
+            </div>
+            <div class="gh-arrow">→</div>
+            <div class="gh-step"><span class="gh-num">02</span>
+              <div><strong>やりたいことを具体的に書く</strong><br /><span>シート名・列名・タイトルなど、自分の業務に合わせた情報を入れる</span></div>
+            </div>
+            <div class="gh-arrow">→</div>
+            <div class="gh-step"><span class="gh-num">03</span>
+              <div><strong>出力形式を指定する</strong><br /><span>「コード全文を出力して」と書くと、そのままコピーして使える形で返してくれる</span></div>
+            </div>
+          </div>
+        </div>
+
+        <p
+          style="font-size:13px;font-weight:700;color:var(--purple);letter-spacing:0.1em;text-transform:uppercase;margin:28px 0 12px;">
+          📋 コピーして使えるプロンプト集</p>
+
+        <div class="prompt-wrap fade-up">
+          <div class="prompt-header">
+            <div class="prompt-dots"><span class="pd pd-r"></span><span class="pd pd-y"></span><span
+                class="pd pd-g"></span></div>
+            <span class="prompt-label">① コードを自分用にカスタマイズする</span>
+            <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+          </div>
+          <pre class="prompt-pre">以下のGASコード（Code.gs）とHTMLファイル（index.html）があります。
+
+[Code.gs の内容をここに貼り付け]
+
+[index.html の内容をここに貼り付け]
+
+このコードを以下の内容に変更してください：
+・シート名：[自分のシート名を入力]
+・表示したい列名：[例：日付, 担当者, 満足度, コメント]
+・ダッシュボードのタイトル：[例：顧客アンケートダッシュボード]
+
+変更後の Code.gs と index.html を、そのままコピーして使える形で全文出力してください。</pre>
+        </div>
+
+        <div class="prompt-wrap fade-up">
+          <div class="prompt-header">
+            <div class="prompt-dots"><span class="pd pd-r"></span><span class="pd pd-y"></span><span
+                class="pd pd-g"></span></div>
+            <span class="prompt-label">② 新機能を追加する（メール自動送信）</span>
+            <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+          </div>
+          <pre class="prompt-pre">以下のGASコードに、お礼メールを自動送信する機能を追加してください。
+
+[Code.gs の内容をここに貼り付け]
+
+追加したい内容：
+・スプレッドシートの[列名（例：B列）]にメールアドレスが入っています
+・そのアドレス全員に、以下のメールを送ってください
+・件名：[例：研修へのご参加ありがとうございました]
+・本文：[送りたいメッセージを書いてください]
+
+追加後のコード全文を出力してください。</pre>
+        </div>
+
+        <div class="prompt-wrap fade-up">
+          <div class="prompt-header">
+            <div class="prompt-dots"><span class="pd pd-r"></span><span class="pd pd-y"></span><span
+                class="pd pd-g"></span></div>
+            <span class="prompt-label">③ エラーが出たときに直してもらう</span>
+            <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+          </div>
+          <pre class="prompt-pre">GASのコードを実行したら、以下のエラーが出ました。原因と直し方を教えてください。
+
+エラーメッセージ：
+[エラーメッセージをここに貼り付け]
+
+実行したコード：
+[コードをここに貼り付け]
+
+修正したコードも全文で出力してください。</pre>
+        </div>
+
+        <div class="think-framework fade-up">
+          <div class="tf-label">💡 頼まれたとき、どう考える？</div>
+          <div class="tf-steps">
+            <div class="tf-step">
+              <div class="tf-num">01</div>
+              <div class="tf-content">
+                <div class="tf-title">タスクを分解する</div>
+                <div class="tf-desc">「何を」「どこから取って」「どこに出すか」に分ける。今日なら：データ取得 → 加工 → 表示</div>
+              </div>
+            </div>
+            <div class="tf-arrow">→</div>
+            <div class="tf-step">
+              <div class="tf-num">02</div>
+              <div class="tf-content">
+                <div class="tf-title">GASのどの機能を使うか決める</div>
+                <div class="tf-desc">SpreadsheetApp（データ）/ HtmlService（表示）/ MailApp（メール）/ UrlFetchApp（外部API）</div>
+              </div>
+            </div>
+            <div class="tf-arrow">→</div>
+            <div class="tf-step">
+              <div class="tf-num">03</div>
+              <div class="tf-content">
+                <div class="tf-title">わからない部分はAIで補う</div>
+                <div class="tf-desc">構造がわかれば、コードの細部はAIに書いてもらえる。まず「何を作るか」を言語化することが大事</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Part 1 -->
+      <section class="section" id="part1">
+        <div class="section-header">
+          <div class="section-num-ghost">02</div>
+          <span class="section-tag teal">Section 2</span>
+          <h2 class="section-title">Part 1　基礎ハンズオン</h2>
+          <span class="section-time">25 min</span>
+        </div>
+        <p class="body">まず「GASを動かせた」という体験をしましょう。スプレッドシートを開いてGASエディタに入るところから始めます。</p>
+
+        <!-- Step 1 -->
+        <div class="step-block fade-up" id="p1s1">
+          <div class="step-header">
+            <div class="step-num">1</div>
+            <div class="step-title">GASエディタを開く</div>
+          </div>
+          <div class="step-body">
+            <div class="step-why"><span
+                class="sw-icon">🎯</span><span>GASのコードを書く場所を確認します。スプレッドシートに紐づいたスクリプトとして動くのが、GASの特徴です。</span></div>
+            <p class="step-desc">スプレッドシートのメニューからGASエディタを起動します。</p>
+            <div class="arrow-step">
+              <span class="as">スプレッドシートを開く</span>
+              <span class="ar">→</span>
+              <span class="as">拡張機能</span>
+              <span class="ar">→</span>
+              <span class="as">Apps Script</span>
+              <span class="ar">→</span>
+              <span class="as">エディタが開いたら完了 ✓</span>
+            </div>
+            <div class="notice">
+              <div class="ni-wrap">💡</div>
+              <span>エディタが開かない場合は、ブラウザのポップアップブロックを確認してください。アドレスバー右側の「ポップアップがブロックされました」を許可すると開きます。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-block fade-up" id="p1s2">
+          <div class="step-header">
+            <div class="step-num">2</div>
+            <div class="step-title">初めてのスクリプトを実行する</div>
+          </div>
+          <div class="step-body">
+            <div class="step-why"><span
+                class="sw-icon">🎯</span><span><strong>まず「動かせた」という体験を作ります。</strong>コードの意味より先に、実行→ログ確認の流れを体で覚えましょう。</span>
+            </div>
+            <p class="step-desc">まず「実行できた」を体験しましょう。コードをコピーして貼り付けて実行するだけです。</p>
+            <div class="code-wrap">
+              <div class="code-header">
+                <div class="traffic-lights">
+                  <div class="tl tl-red"></div>
+                  <div class="tl tl-yellow"></div>
+                  <div class="tl tl-green"></div>
+                </div>
+                <span class="code-lang">JavaScript (GAS)</span>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <pre><code><span class="c-kw">function</span> <span class="c-fn">myFunction</span><span class="c-w">() {</span>
+  <span class="c-fn">Logger</span><span class="c-w">.</span><span class="c-fn">log</span><span class="c-w">(</span><span class="c-str">"こんにちは！GASが動きました"</span><span class="c-w">);</span>
+<span class="c-w">}</span></code></pre>
+            </div>
+            <ol class="proc">
+              <li><span class="pnum">1</span>上のコードをコピーして、エディタの既存コードと<strong>入れ替えて</strong>貼り付ける</li>
+              <li><span class="pnum">2</span>上部の関数選択で <strong>「myFunction」</strong> を選択する</li>
+              <li><span class="pnum">3</span><strong>▶ 実行</strong> ボタンをクリック（初回は権限の確認が出ます → 許可してください）</li>
+              <li><span class="pnum">4</span>下部の「実行ログ」に <strong>「こんにちは！GASが動きました」</strong> と表示されたら成功</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-block fade-up" id="p1s3">
+          <div class="step-header">
+            <div class="step-num">3</div>
+            <div class="step-title">スプレッドシートのデータを読み込む</div>
+          </div>
+          <div class="step-body">
+            <div class="step-why"><span
+                class="sw-icon">🎯</span><span>ダッシュボードの核心は「スプレッドシートのデータを読み込む」こと。<strong>SpreadsheetApp</strong>
+                がその入口です。</span></div>
+            <p class="step-desc">GASからスプレッドシートのデータを取得してみましょう。<span class="ic">SpreadsheetApp</span> を使います。</p>
+            <div class="code-wrap">
+              <div class="code-header">
+                <div class="traffic-lights">
+                  <div class="tl tl-red"></div>
+                  <div class="tl tl-yellow"></div>
+                  <div class="tl tl-green"></div>
+                </div>
+                <span class="code-lang">JavaScript (GAS)</span>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <pre><code><span class="c-kw">function</span> <span class="c-fn">getData</span><span class="c-w">() {</span>
+  <span class="c-kw">const</span> <span class="c-var">sheet</span> <span class="c-w">=</span> <span class="c-fn">SpreadsheetApp</span><span class="c-w">.</span><span class="c-fn">getActiveSpreadsheet</span><span class="c-w">()</span>
+                               <span class="c-w">.</span><span class="c-fn">getSheetByName</span><span class="c-w">(</span><span class="c-str">"満足度調査"</span><span class="c-w">);</span>
+  <span class="c-kw">const</span> <span class="c-var">data</span>  <span class="c-w">=</span> <span class="c-var">sheet</span><span class="c-w">.</span><span class="c-fn">getDataRange</span><span class="c-w">().</span><span class="c-fn">getValues</span><span class="c-w">();</span>
+  <span class="c-fn">Logger</span><span class="c-w">.</span><span class="c-fn">log</span><span class="c-w">(</span><span class="c-var">data</span><span class="c-w">);</span>
+<span class="c-w">}</span></code></pre>
+            </div>
+            <ol class="proc">
+              <li><span class="pnum">1</span>コードをコピーして貼り付ける</li>
+              <li><span class="pnum">2</span>関数を <strong>「getData」</strong> に切り替えて実行</li>
+              <li><span class="pnum">3</span>実行ログにシートのデータが表示されたら成功</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-block fade-up" id="p1s4">
+          <div class="step-header">
+            <div class="step-num">4</div>
+            <div class="step-title">HTMLファイルを作ってブラウザに表示する</div>
+          </div>
+          <div class="step-body">
+            <div class="step-why"><span class="sw-icon">🎯</span><span>URLを開くだけで誰でも見られる画面を作ります。<strong>doGet →
+                  HtmlService</strong> の繋がりを体験しましょう。</span></div>
+            <p class="step-desc">いよいよWebページを表示します。HTMLファイルを追加して、GASから呼び出します。</p>
+
+            <p style="font-size:14px;font-weight:700;color:var(--ink);margin:18px 0 10px;">① HTMLファイルを追加する</p>
+            <div class="arrow-step">
+              <span class="as">左のファイルパネル「＋」</span>
+              <span class="ar">→</span>
+              <span class="as">HTMLファイル</span>
+              <span class="ar">→</span>
+              <span class="as">名前を <strong>index</strong> にする</span>
+            </div>
+            <div class="code-wrap">
+              <div class="code-header">
+                <div class="traffic-lights">
+                  <div class="tl tl-red"></div>
+                  <div class="tl tl-yellow"></div>
+                  <div class="tl tl-green"></div>
+                </div>
+                <span class="code-lang">HTML (index.html)</span>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <pre><code><span class="c-w">&lt;!DOCTYPE html&gt;</span>
+<span class="c-w">&lt;html&gt;</span>
+  <span class="c-w">&lt;head&gt;</span>
+    <span class="c-w">&lt;title&gt;</span><span class="c-str">はじめてのGASアプリ</span><span class="c-w">&lt;/title&gt;</span>
+  <span class="c-w">&lt;/head&gt;</span>
+  <span class="c-w">&lt;body&gt;</span>
+    <span class="c-w">&lt;h1&gt;</span><span class="c-str">動いた！</span><span class="c-w">&lt;/h1&gt;</span>
+    <span class="c-w">&lt;p&gt;</span><span class="c-str">GASからHTMLを表示できました。</span><span class="c-w">&lt;/p&gt;</span>
+  <span class="c-w">&lt;/body&gt;</span>
+<span class="c-w">&lt;/html&gt;</span></code></pre>
+            </div>
+
+            <p style="font-size:14px;font-weight:700;color:var(--ink);margin:26px 0 10px;">② Code.gs に doGet 関数を書く</p>
+            <div class="code-wrap">
+              <div class="code-header">
+                <div class="traffic-lights">
+                  <div class="tl tl-red"></div>
+                  <div class="tl tl-yellow"></div>
+                  <div class="tl tl-green"></div>
+                </div>
+                <span class="code-lang">JavaScript (Code.gs)</span>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <pre><code><span class="c-kw">function</span> <span class="c-fn">doGet</span><span class="c-w">() {</span>
+  <span class="c-kw">return</span> <span class="c-fn">HtmlService</span><span class="c-w">.</span><span class="c-fn">createHtmlOutputFromFile</span><span class="c-w">(</span><span class="c-str">'index'</span><span class="c-w">);</span>
+<span class="c-w">}</span></code></pre>
+            </div>
+
+            <p style="font-size:14px;font-weight:700;color:var(--ink);margin:26px 0 10px;">③ デプロイしてURLを開く</p>
+            <div class="arrow-step">
+              <span class="as">右上「デプロイ」</span>
+              <span class="ar">→</span>
+              <span class="as">新しいデプロイ</span>
+              <span class="ar">→</span>
+              <span class="as">Webアプリ</span>
+              <span class="ar">→</span>
+              <span class="as">アクセス：全員</span>
+              <span class="ar">→</span>
+              <span class="as">URLを開く</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Part 2 -->
+      <section class="section" id="part2">
+        <div class="section-header">
+          <div class="section-num-ghost">03</div>
+          <span class="section-tag purple">Section 3</span>
+          <h2 class="section-title">Part 2　メインハンズオン</h2>
+          <span class="section-time">55 min</span>
+        </div>
+        <p class="body">テンプレートを使って、アンケートダッシュボードを完成させましょう。コードは3箇所書き換えるだけで、自分の業務に転用できます。</p>
+
+        <div class="step-indicator fade-up">
+          <div class="si-item">
+            <div class="si-dot" id="si1">1</div>
+            <div class="si-label">テンプレ<br />コピー</div>
+          </div>
+          <div class="si-item">
+            <div class="si-dot" id="si2">2</div>
+            <div class="si-label">コード<br />確認</div>
+          </div>
+          <div class="si-item">
+            <div class="si-dot" id="si3">3</div>
+            <div class="si-label">デプロイ</div>
+          </div>
+          <div class="si-item">
+            <div class="si-dot" id="si4">4</div>
+            <div class="si-label">動作<br />確認</div>
+          </div>
+          <div class="si-item">
+            <div class="si-dot" id="si5">5</div>
+            <div class="si-label">業務<br />マッピング</div>
+          </div>
+          <div class="si-item">
+            <div class="si-dot" id="si6">6</div>
+            <div class="si-label">カスタ<br />マイズ</div>
+          </div>
+          <div class="si-item">
+            <div class="si-dot" id="si7">7</div>
+            <div class="si-label">自動更新<br />体験</div>
+          </div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="step-block purple-accent fade-up" id="p2s1">
+          <div class="step-header">
+            <div class="step-num purple">1</div>
+            <div class="step-title">テンプレートをコピーする</div>
+            <span class="step-time">5 min</span>
+          </div>
+          <div class="step-body">
+            <div class="step-why"><span
+                class="sw-icon">🎯</span><span>全体の構造が完成したテンプレートを使います。「0から作る」より「動いているものを理解して改造する」ほうが早く身につきます。</span>
+            </div>
+            <p class="step-desc">テンプレートのスプレッドシートをマイドライブにコピーします。</p>
+            <div class="url-placeholder" id="templateSheetUrl">
+              <div class="url-pulse"></div>
+              🔗 テンプレートスプレッドシートのURLをここに表示
+            </div>
+            <ol class="proc">
+              <li><span class="pnum purple">1</span>上のリンクを開く</li>
+              <li><span class="pnum purple">2</span>メニュー <strong>「ファイル」→「コピーを作成」</strong></li>
+              <li><span class="pnum purple">3</span>名前はそのままでOK → <strong>「コピーを作成」</strong> をクリック</li>
+              <li><span class="pnum purple">4</span>マイドライブにコピーが作成されたら完了</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-block purple-accent fade-up" id="p2s2">
+          <div class="step-header">
+            <div class="step-num purple">2</div>
+            <div class="step-title">GASエディタを開いてコードを確認する</div>
+            <span class="step-time">8 min</span>
+          </div>
+          <div class="step-body">
+            <div class="step-why"><span
+                class="sw-icon">🎯</span><span>変えるのは<strong>3箇所だけ</strong>。コードを全部理解しなくても大丈夫。「どこを変えれば何が変わるか」がわかれば、自分の業務に転用できます。</span>
+            </div>
+            <p class="step-desc">コードは<strong>3箇所だけ</strong>変えれば自分の業務に転用できます。まずは全体を眺めてみましょう。</p>
+            <div class="change-map">
+              <div class="cm-label">変更マップ（今日変える3箇所）</div>
+              <div class="cm-list">
+                <div class="cm-item"><span class="cm-badge">①</span>シート名（Code.gs の SHEET_NAME）</div>
+                <div class="cm-item"><span class="cm-badge">②</span>表示する列（Code.gs の COLUMNS）</div>
+                <div class="cm-item"><span class="cm-badge">③</span>ページタイトル（index.html の &lt;title&gt;）</div>
+              </div>
+            </div>
+            <div class="code-wrap">
+              <div class="code-header">
+                <div class="traffic-lights">
+                  <div class="tl tl-red"></div>
+                  <div class="tl tl-yellow"></div>
+                  <div class="tl tl-green"></div>
+                </div>
+                <span class="code-lang">JavaScript (Code.gs) — 変更マップ</span>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <pre><code><span class="c-comment">// ① シート名を自分のものに変える</span>
+<span class="c-hl"><span class="c-kw">const</span> <span class="c-var">SHEET_NAME</span> <span class="c-w">=</span> <span class="c-str">"満足度調査"</span><span class="c-w">;</span></span>
+
+<span class="c-comment">// ② 表示したい列を自分のデータに合わせて変える</span>
+<span class="c-hl"><span class="c-kw">const</span> <span class="c-var">COLUMNS</span> <span class="c-w">= [</span><span class="c-str">"日付"</span><span class="c-w">,</span> <span class="c-str">"回答者"</span><span class="c-w">,</span> <span class="c-str">"満足度"</span><span class="c-w">,</span> <span class="c-str">"コメント"</span><span class="c-w">];</span></span></code></pre>
+            </div>
+            <div class="code-wrap">
+              <div class="code-header">
+                <div class="traffic-lights">
+                  <div class="tl tl-red"></div>
+                  <div class="tl tl-yellow"></div>
+                  <div class="tl tl-green"></div>
+                </div>
+                <span class="code-lang">HTML (index.html) — 変更マップ</span>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <pre><code><span class="c-comment">&lt;!-- ③ ページタイトルを変える --&gt;</span>
+<span class="c-hl"><span class="c-w">&lt;title&gt;</span><span class="c-str">アンケートダッシュボード</span><span class="c-w">&lt;/title&gt;</span></span></code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-block purple-accent fade-up" id="p2s3">
+          <div class="step-header">
+            <div class="step-num purple">3</div>
+            <div class="step-title">Webアプリとしてデプロイする</div>
+            <span class="step-time">10 min</span>
+          </div>
+          <div class="step-body">
+            <div class="step-why"><span
+                class="sw-icon">🎯</span><span>「デプロイ」とは、作ったアプリをインターネットに公開すること。URLが発行されると、誰でもアクセスできるWebアプリになります。</span>
+            </div>
+            <p class="step-desc">GASをWebアプリとして公開し、ダッシュボードのURLを発行します。</p>
+            <ol class="proc">
+              <li><span class="pnum purple">1</span>右上 <strong>「デプロイ」→「新しいデプロイ」</strong> をクリック</li>
+              <li><span class="pnum purple">2</span>種類の選択：歯車アイコン → <strong>「Webアプリ」</strong> を選択</li>
+              <li><span class="pnum purple">3</span>説明：任意（空白でもOK）</li>
+              <li><span class="pnum purple">4</span>次のユーザーとして実行：<strong>「自分」</strong></li>
+              <li><span class="pnum purple">5</span>アクセスできるユーザー：<strong>「全員」</strong></li>
+              <li><span class="pnum purple">6</span><strong>「デプロイ」</strong> → 権限の確認 → Googleアカウントを選択 → 許可</li>
+              <li><span class="pnum purple">7</span>表示された <strong>WebアプリのURL</strong> をコピーして保存しておく</li>
+            </ol>
+            <div class="notice">
+              <div class="ni-wrap">⚠️</div>
+              <span>「このアプリはGoogleで確認されていません」と表示されたら、「詳細」→「（プロジェクト名）に移動」をクリックして許可してください。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-block purple-accent fade-up" id="p2s4">
+          <div class="step-header">
+            <div class="step-num purple">4</div>
+            <div class="step-title">URLにアクセスして動作確認</div>
+            <span class="step-time">7 min</span>
+          </div>
+          <div class="step-body">
+            <div class="step-why"><span
+                class="sw-icon">🎯</span><span>今日のゴールです。<strong>「動いた！」の瞬間</strong>を体験してください。このURLを誰かに送れば、今すぐ共有できます。</span>
+            </div>
+            <p class="step-desc">コピーしたURLをブラウザで開いてみましょう。</p>
+            <div class="success-banner">
+              <div class="success-icon-wrap">🎉</div>
+              <div class="success-text">
+                <div class="st">ダッシュボードが表示されたら成功！</div>
+                <div class="ss">スプレッドシートのデータがWebページになりました。このURLを誰かに送れば、今すぐ共有できます。</div>
+              </div>
+            </div>
+            <div class="notice">
+              <div class="ni-wrap">💡</div>
+              <span>うまく表示されない場合は、デプロイ時の「アクセスできるユーザー」が「全員」になっているか確認してください。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-block purple-accent fade-up" id="p2s5">
+          <div class="step-header">
+            <div class="step-num purple">5</div>
+            <div class="step-title">業務マッピングワーク</div>
+            <span class="step-time">5 min</span>
+          </div>
+          <div class="step-body">
+            <div class="step-why"><span
+                class="sw-icon">🎯</span><span>「動かせた」で終わらせないために。自分の業務での使いどころを言語化することで、明日から使えるイメージが生まれます。</span></div>
+            <p class="step-desc">「動かせた！」を「使えるものに変える」ために、自分の業務での使いどころを書き出してみましょう。</p>
+            <div class="mapping-form">
+              <div class="mf-header">
+                <div class="mf-label">MY USE CASE — 自分の業務への紐付け</div>
+              </div>
+              <div class="mf-body">
+                <div class="mapping-field">
+                  <label>使いたいシーン</label>
+                  <input class="field-line" type="text" placeholder="例：毎月の顧客満足度アンケートの結果を可視化したい" />
+                </div>
+                <div class="mapping-field">
+                  <label>集めたいデータ（列名）</label>
+                  <input class="field-line" type="text" placeholder="例：日付・担当者・満足度スコア・改善要望" />
+                </div>
+                <div class="mapping-field">
+                  <label>見せたい相手</label>
+                  <input class="field-line" type="text" placeholder="例：チームリーダー・上長・プロジェクトメンバー" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="step-block purple-accent fade-up" id="p2s6">
+          <div class="step-header">
+            <div class="step-num purple">6</div>
+            <div class="step-title">変更マップ3箇所を書き換えてカスタマイズ</div>
+            <span class="step-time">15 min</span>
+          </div>
+          <div class="step-body">
+            <div class="step-why"><span class="sw-icon">🎯</span><span>Step
+                2で確認した3箇所を書き換えるだけ。これができれば、どんな業務のデータにも同じ仕組みが使えます。</span></div>
+            <p class="step-desc">Step 5で書き出した内容をもとに、変更マップの3箇所を自分の業務に合わせて書き換えましょう。</p>
+            <div class="notice" style="margin-bottom:16px;">
+              <div class="ni-wrap" style="background:var(--purple-gradient);">✨</div>
+              <span>3箇所以外も変えたい場合は、<strong>Geminiに任せましょう。</strong>コードをまるごとコピーしてプロンプトに貼るだけです。 → <a href="#gas-gemini"
+                  style="color:var(--purple);font-weight:700;text-decoration:underline;">プロンプト集を見る ↑</a></span>
+            </div>
+            <div class="change-map">
+              <div class="cm-label">変更するのはこの3箇所だけ</div>
+              <div class="cm-list">
+                <div class="cm-item"><span class="cm-badge">①</span>SHEET_NAME を自分のシート名に変える</div>
+                <div class="cm-item"><span class="cm-badge">②</span>COLUMNS を自分の列名に変える</div>
+                <div class="cm-item"><span class="cm-badge">③</span>&lt;title&gt; を自分のダッシュボード名に変える</div>
+              </div>
+            </div>
+            <p style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 10px;">書き換えたら再デプロイする</p>
+            <div class="arrow-step">
+              <span class="as">「デプロイ」</span>
+              <span class="ar">→</span>
+              <span class="as">デプロイを管理</span>
+              <span class="ar">→</span>
+              <span class="as">鉛筆アイコン（編集）</span>
+              <span class="ar">→</span>
+              <span class="as">バージョン：新バージョン</span>
+              <span class="ar">→</span>
+              <span class="as">デプロイ</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="step-block purple-accent fade-up" id="p2s7">
+          <div class="step-header">
+            <div class="step-num purple">7</div>
+            <div class="step-title">データを追加して自動更新を体験する</div>
+            <span class="step-time">5 min</span>
+          </div>
+          <div class="step-body">
+            <div class="step-why"><span
+                class="sw-icon">🎯</span><span>GASの真骨頂は「一度作れば自動で動く」こと。データを追加するだけで画面が更新される体験をしてください。</span></div>
+            <p class="step-desc">スプレッドシートに新しいデータを追加して、ダッシュボードが自動で変わることを確認しましょう。</p>
+            <ol class="proc">
+              <li><span class="pnum purple">1</span>スプレッドシートを開いて、新しい行にデータを追加する</li>
+              <li><span class="pnum purple">2</span>ダッシュボードのURLをリロード（F5 または ⌘R）</li>
+              <li><span class="pnum purple">3</span>追加したデータがダッシュボードに反映されたら成功</li>
+            </ol>
+            <div class="success-banner">
+              <div class="success-icon-wrap">✅</div>
+              <div class="success-text">
+                <div class="st">これで完成です！</div>
+                <div class="ss">スプレッドシートを更新するだけで、ダッシュボードが自動で最新状態になります。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: 発展 -->
+      <section class="section" id="advanced">
+        <div class="section-header">
+          <div class="section-num-ghost">04</div>
+          <span class="section-tag" style="background:linear-gradient(135deg,var(--purple),#A78BFA);">発展</span>
+          <h2 class="section-title">もっとできること</h2>
+        </div>
+        <p class="body">今日作ったダッシュボードは出発点です。同じ構造を使って、さらに広げることができます。</p>
+
+        <!-- メール自動送信 -->
+        <h3 class="sub" id="adv-mail" style="border-left-color:var(--purple);">✉️ お礼メールを自動送信する</h3>
+        <p class="body">スプレッドシートのメールアドレス列を読んで、全員に自動でメールを送れます。<code
+            style="background:var(--purple-9);color:var(--purple);padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:13px;">MailApp.sendEmail()</code>
+          を使うだけです。</p>
+
+        <div class="code-wrap fade-up">
+          <div class="code-header">
+            <div class="traffic-lights">
+              <div class="tl tl-red"></div>
+              <div class="tl tl-yellow"></div>
+              <div class="tl tl-green"></div>
+            </div>
+            <span class="code-lang">JavaScript (Code.gs) — メール自動送信</span>
+            <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+          </div>
+          <pre><code><span class="c-kw">function</span> <span class="c-fn">sendThankYouEmails</span><span class="c-w">() {</span>
+  <span class="c-kw">const</span> <span class="c-var">sheet</span> <span class="c-w">=</span> <span class="c-fn">SpreadsheetApp</span><span class="c-w">.</span><span class="c-fn">getActiveSpreadsheet</span><span class="c-w">()</span>
+                               <span class="c-w">.</span><span class="c-fn">getSheetByName</span><span class="c-w">(</span><span class="c-str">"満足度調査"</span><span class="c-w">);</span>
+  <span class="c-kw">const</span> <span class="c-var">rows</span>  <span class="c-w">=</span> <span class="c-var">sheet</span><span class="c-w">.</span><span class="c-fn">getDataRange</span><span class="c-w">().</span><span class="c-fn">getValues</span><span class="c-w">();</span>
+
+  <span class="c-comment">// 1行目はヘッダーなので2行目（index 1）から処理する</span>
+  <span class="c-kw">for</span> <span class="c-w">(</span><span class="c-kw">let</span> <span class="c-var">i</span> <span class="c-w">= 1;</span> <span class="c-var">i</span> <span class="c-w">&lt;</span> <span class="c-var">rows</span><span class="c-w">.length;</span> <span class="c-var">i</span><span class="c-w">++) {</span>
+    <span class="c-kw">const</span> <span class="c-var">email</span> <span class="c-w">=</span> <span class="c-var">rows</span><span class="c-w">[</span><span class="c-var">i</span><span class="c-w">][1];</span> <span class="c-comment">// B列: メールアドレス</span>
+    <span class="c-kw">const</span> <span class="c-var">name</span>  <span class="c-w">=</span> <span class="c-var">rows</span><span class="c-w">[</span><span class="c-var">i</span><span class="c-w">][2];</span> <span class="c-comment">// C列: 名前</span>
+
+    <span class="c-fn">MailApp</span><span class="c-w">.</span><span class="c-fn">sendEmail</span><span class="c-w">({</span>
+      <span class="c-var">to</span><span class="c-w">:</span>      <span class="c-var">email</span><span class="c-w">,</span>
+      <span class="c-var">subject</span><span class="c-w">:</span> <span class="c-str">"【ご参加ありがとうございました】"</span><span class="c-w">,</span>
+      <span class="c-var">body</span><span class="c-w">:</span>    <span class="c-str">`</span><span class="c-w">${</span><span class="c-var">name</span><span class="c-w">}</span><span class="c-str"> さん、\n\nご参加いただきありがとうございました。\nアンケートへのご回答も感謝します。`</span>
+    <span class="c-w">});</span>
+  <span class="c-w">}</span>
+<span class="c-w">}</span></code></pre>
+        </div>
+
+        <div class="notice" style="border-color:var(--purple);background:var(--purple-9);">
+          <div class="ni-wrap" style="background:var(--purple-gradient);">💡</div>
+          <span>初回実行時に「Gmailへのアクセス許可」が求められます。許可すると、Googleアカウントのメールアドレスから送信されます。1日あたりの送信上限は100通（無料アカウント）です。</span>
+        </div>
+
+        <!-- Clasp -->
+        <h3 class="sub" id="adv-clasp" style="border-left-color:var(--purple);margin-top:48px;">🚀 もっと本格的に：Claspを使ってみる
+        </h3>
+        <p class="body">GASに慣れてきたら、<strong>Clasp</strong>（クラスプ）を使うとさらに快適に開発できます。</p>
+
+        <div class="info-grid fade-up" style="margin:20px 0;">
+          <div class="info-card">
+            <div class="ic-num">Clasp とは</div>
+            <div class="ic-title">💻 ローカルでGASを書く</div>
+            <div class="ic-body">VSCodeなど自分のエディタでコードを書いて、GASにプッシュできる。補完・フォーマット・AIの支援がフル活用できる</div>
+          </div>
+          <div class="info-card">
+            <div class="ic-num">できること</div>
+            <div class="ic-title">🔀 Gitでバージョン管理</div>
+            <div class="ic-body">GitHubと連携すれば変更履歴が残り、チームでの共同開発もしやすくなる。スクリプトを「資産」として管理できる</div>
+          </div>
+        </div>
+
+        <div class="code-wrap fade-up">
+          <div class="code-header">
+            <div class="traffic-lights">
+              <div class="tl tl-red"></div>
+              <div class="tl tl-yellow"></div>
+              <div class="tl tl-green"></div>
+            </div>
+            <span class="code-lang">Terminal — Claspのインストール</span>
+            <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+          </div>
+          <pre><code><span class="c-comment"># Claspをインストール</span>
+<span class="c-fn">npm</span> <span class="c-w">install -g @google/clasp</span>
+
+<span class="c-comment"># Googleアカウントでログイン</span>
+<span class="c-fn">clasp</span> <span class="c-w">login</span>
+
+<span class="c-comment"># 既存のGASプロジェクトをローカルにクローン</span>
+<span class="c-fn">clasp</span> <span class="c-w">clone &lt;スクリプトID&gt;</span>
+
+<span class="c-comment"># 変更をGASにプッシュ</span>
+<span class="c-fn">clasp</span> <span class="c-w">push</span></code></pre>
+        </div>
+
+        <div class="notice fade-up">
+          <div class="ni-wrap">📌</div>
+          <span>Claspは「GASをもっと本格的に使いたい」と思ったタイミングで始めれば十分です。今日のハンズオンが終わってからでも遅くありません。まず今日の内容を自分の業務に転用することを優先しましょう。</span>
+        </div>
+
+      </section>
+
+      <!-- 作品提出 & ギャラリー -->
+      <section class="submit-section" id="submit">
+        <span class="submit-eyebrow">Submit & Share</span>
+        <h2 class="submit-title">完成したダッシュボードを提出する</h2>
+        <p class="submit-sub">
+          WebアプリURL をペーストするだけで、みんなのギャラリーに表示されます。<br>
+          ニックネームとコメントは任意。提出後にもう一度提出すれば上書きされます。
+        </p>
+
+        <!-- 提出フォーム -->
+        <form class="submit-form" id="submitForm" onsubmit="return submitWork(event)">
+          <div class="submit-row">
+            <label class="submit-label" for="subNickname">
+              ニックネーム <span class="opt">任意</span>
+            </label>
+            <input class="submit-input" type="text" id="subNickname" placeholder="例：田中・匿名希望・チーム名など (空欄なら 匿名さん)"
+              maxlength="30">
+          </div>
+          <div class="submit-row">
+            <label class="submit-label" for="subUrl">
+              WebアプリURL <span class="req">必須</span>
+            </label>
+            <input class="submit-input" type="url" id="subUrl"
+              placeholder="https://script.google.com/macros/s/XXXXX/exec" required>
+          </div>
+          <div class="submit-row">
+            <label class="submit-label" for="subComment">
+              コメント <span class="opt">任意</span>
+            </label>
+            <textarea class="submit-textarea" id="subComment" placeholder="工夫したところ・つまずいたところ・感想など"
+              maxlength="200"></textarea>
+          </div>
+          <div class="submit-actions">
+            <span class="submit-status" id="submitStatus"></span>
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M22 2L11 13" />
+                <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+              </svg>
+              提出する
+            </button>
+          </div>
+        </form>
+
+        <!-- ギャラリー -->
+        <div class="gallery-header">
+          <div class="gallery-heading">
+            <svg width="18" height="18" fill="none" stroke="#ff7eb6" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            みんなの作品ギャラリー
+            <span class="gallery-count" id="galleryCount">0</span>
+          </div>
+          <button type="button" class="gallery-refresh" id="refreshBtn" onclick="loadGallery(true)">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
+            更新
+          </button>
+        </div>
+        <div class="gallery-grid" id="galleryGrid">
+          <div class="gallery-empty">
+            <span class="emoji">🎨</span>
+            まだ提出がありません。最初の1人になりましょう！
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="site-footer">
+        <div class="footer-ghost">GAS</div>
+        <div class="footer-title">お疲れさまでした！</div>
+        <div class="footer-sub">本日はご参加いただきありがとうございました。</div>
+        <div class="footer-note">作ったものは、あなたの業務でそのまま使えます。</div>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- ============================================================
+       キーワードゲート
+  ============================================================ -->
+  <div id="kwGate" style="
+    position:fixed;inset:0;z-index:99999;
+    background:linear-gradient(135deg,#0d0b14 0%,#1a1525 100%);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif;
+  ">
+    <!-- 背景グラデーション装飾 -->
+    <div style="position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(ellipse 700px 400px at 70% 30%,rgba(165,30,109,0.12) 0%,transparent 70%),
+                 radial-gradient(ellipse 500px 500px at 20% 80%,rgba(26,107,58,0.1) 0%,transparent 60%);"></div>
+
+    <div style="position:relative;text-align:center;max-width:480px;width:90%;padding:0 20px;">
+      <!-- ロゴ的な見出し -->
+      <div style="font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+        color:rgba(255,255,255,0.35);margin-bottom:20px;">GAS 実践会 2026</div>
+      <div style="font-size:clamp(28px,5vw,40px);font-weight:700;color:#fff;
+        line-height:1.3;margin-bottom:10px;letter-spacing:-.01em;">
+        はじめてのGASアプリ<br/>作成体験
+      </div>
+      <div style="font-size:15px;color:rgba(255,255,255,0.4);margin-bottom:48px;">
+        講義サイトにアクセスするには<br/>キーワードを入力してください
+      </div>
+
+      <!-- 入力フォーム -->
+      <div style="position:relative;margin-bottom:16px;">
+        <input id="kwInput" type="password"
+          placeholder="キーワードを入力"
+          autocomplete="off" spellcheck="false"
+          style="width:100%;padding:18px 56px 18px 24px;
+            background:rgba(255,255,255,0.06);
+            border:1.5px solid rgba(255,255,255,0.12);
+            border-radius:14px;
+            font-size:18px;color:#fff;
+            font-family:inherit;outline:none;
+            transition:border-color .2s,background .2s;
+            box-sizing:border-box;letter-spacing:.08em;text-align:center;"
+          onkeydown="if(event.key==='Enter')checkKeyword()"
+          oninput="document.getElementById('kwError').style.opacity=0"
+        />
+        <!-- 目のアイコン（表示/非表示切り替え） -->
+        <button onclick="togglePw()" tabindex="-1"
+          style="position:absolute;right:16px;top:50%;transform:translateY(-50%);
+            background:none;border:none;cursor:pointer;padding:4px;
+            color:rgba(255,255,255,0.35);transition:color .15s;"
+          onmouseenter="this.style.color='rgba(255,255,255,0.7)'"
+          onmouseleave="this.style.color='rgba(255,255,255,0.35)'"
+          id="pwToggleBtn">
+          <svg id="eyeIcon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- エラーメッセージ -->
+      <div id="kwError" style="font-size:13px;color:#ff8a8a;
+        margin-bottom:16px;opacity:0;transition:opacity .2s;min-height:20px;">
+        キーワードが違います。もう一度お試しください。
+      </div>
+
+      <!-- 送信ボタン -->
+      <button onclick="checkKeyword()"
+        style="width:100%;padding:18px;
+          background:linear-gradient(135deg,#a51e6d,#c0287c);
+          border:none;border-radius:14px;
+          font-size:17px;font-weight:700;color:#fff;
+          cursor:pointer;letter-spacing:.04em;
+          transition:transform .15s,box-shadow .15s,opacity .15s;
+          box-shadow:0 6px 20px rgba(165,30,109,0.4);"
+        onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 28px rgba(165,30,109,0.5)'"
+        onmouseleave="this.style.transform='';this.style.boxShadow='0 6px 20px rgba(165,30,109,0.4)'"
+      >
+        入室する →
+      </button>
+    </div>
+  </div>
+
+  <style>
+    #kwInput:focus {
+      border-color: rgba(165,30,109,0.6) !important;
+      background: rgba(255,255,255,0.09) !important;
+    }
+    @keyframes kwShake {
+      0%,100%{transform:translateX(0)}
+      20%{transform:translateX(-8px)}
+      40%{transform:translateX(8px)}
+      60%{transform:translateX(-5px)}
+      80%{transform:translateX(5px)}
+    }
+    .kw-shake { animation: kwShake .4s ease; }
+  </style>
+
+  <script>
+    // =============================================================
+    // ★ キーワード設定 ── ここを書き換えてください
+    // =============================================================
+    const SITE_KEYWORD = 'GAS2026';   // ← 当日配布するキーワードに変更
+
+    // =============================================================
+    // ★ URL 設定ブロック ── ここだけ書き換えればOK
+    // =============================================================
+
+    // ① テンプレートスプレッドシートの共有URL（「コピーを作成」リンク）
+    //    例: 'https://docs.google.com/spreadsheets/d/XXXXX/copy'
+    const TEMPLATE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1L4D9wOe2QF3-clQg0MiUWIZiNAq20_0lMpxjSvo6y4E/copy';
+
+    // ② tracker.gs のWebアプリURL（進捗トラッキング & 作品提出ギャラリー共通）
+    //    デプロイ後に取得したURLを貼る。空のままだと提出機能は無効。
+    //    例: 'https://script.google.com/macros/s/XXXXX/exec'
+    const GAS_TRACKER_URL = 'https://script.google.com/macros/s/AKfycbypUL1_JFmNTU48E3DoeLqpMjr_37fvZV1Qf_f0fIK025ar83Jnz3BtC4CnHc1BEKfH/exec';
+
+    // =============================================================
+
+    // テンプレートURLを自動反映
+    (function applyUrls() {
+      const tEl = document.getElementById('templateSheetUrl');
+      if (tEl && TEMPLATE_SHEET_URL) {
+        tEl.style.cursor = 'pointer';
+        tEl.innerHTML = '<div class="url-pulse"></div>'
+          + '<a href="' + TEMPLATE_SHEET_URL + '" target="_blank" rel="noopener" style="'
+          + 'color:#fff;text-decoration:none;font-weight:700;display:flex;'
+          + 'align-items:center;gap:8px;justify-content:center;">'
+          + '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">'
+          + '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>'
+          + '<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>'
+          + '</svg>🔗 テンプレートをマイドライブにコピーする</a>';
+      }
+    })();
+
+    // ── Copy button ──
+    function copyCode(btn) {
+      const pre = btn.closest('.code-wrap').querySelector('pre');
+      const text = pre.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '✓ コピー済み';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'コピー';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    // ── Scroll spy: active nav link ──
+    const allSections = document.querySelectorAll('[id]');
+    const navLinks = document.querySelectorAll('.nav-link, .mobile-nav a');
+
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    allSections.forEach(s => spy.observe(s));
+
+    // ── Fade-up scroll animations ──
+    const fadeEls = document.querySelectorAll('.fade-up');
+    const fadeObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObs.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -60px 0px' });
+
+    fadeEls.forEach(el => fadeObs.observe(el));
+
+    // ── Step indicator: 完了ボタン連動（スクロール検知は使わない） ──
+    // 各 p2sX の完了ボタンが押されたときに updateStepIndicator() を呼ぶ
+    function updateStepIndicator(completedStepNum) {
+      for (let i = 1; i <= 7; i++) {
+        const dot = document.getElementById('si' + i);
+        const item = dot ? dot.closest('.si-item') : null;
+        if (!dot) continue;
+        dot.classList.remove('active-pulse');
+        if (i <= completedStepNum) {
+          dot.classList.add('done');
+          if (item) item.classList.add('done');
+        }
+        // それより先のドットは現状維持（後退しない）
+      }
+    }
+
+    // ── Hero stagger entrance ──
+    window.addEventListener('DOMContentLoaded', () => {
+      const heroEls = document.querySelectorAll(
+        '.header-eyebrow, .header-title, .header-sub, .goal-badge'
+      );
+      heroEls.forEach((el, i) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`;
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+          });
+        });
+      });
+    });
+
+    // ── 進捗トラッキング（匿名・サイレント） ──
+
+    // セッションID（匿名・端末ごとに固定）
+    function getSessionId() {
+      let id = localStorage.getItem('gas_workshop_session');
+      if (!id) {
+        id = Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+        localStorage.setItem('gas_workshop_session', id);
+      }
+      return id;
+    }
+    const SESSION_ID = getSessionId();
+
+    function trackStep(stepId) {
+      if (!GAS_TRACKER_URL) return;
+      try {
+        fetch(GAS_TRACKER_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({
+            sessionId: SESSION_ID,
+            step: stepId,
+            timestamp: new Date().toISOString()
+          })
+        });
+      } catch (e) { /* サイレント失敗 */ }
+    }
+
+    // ── 作品提出 & ギャラリー ──
+
+    function submitWork(ev) {
+      ev.preventDefault();
+      const statusEl = document.getElementById('submitStatus');
+      const btn = document.getElementById('submitBtn');
+      const nickname = document.getElementById('subNickname').value.trim();
+      const url = document.getElementById('subUrl').value.trim();
+      const comment = document.getElementById('subComment').value.trim();
+
+      if (!GAS_TRACKER_URL) {
+        statusEl.textContent = '⚠ GAS_TRACKER_URL が未設定です（運営に連絡）';
+        statusEl.className = 'submit-status error';
+        return false;
+      }
+      if (!/^https?:\/\//.test(url)) {
+        statusEl.textContent = '⚠ URLは https:// で始めてください';
+        statusEl.className = 'submit-status error';
+        return false;
+      }
+
+      btn.disabled = true;
+      statusEl.textContent = '送信中…';
+      statusEl.className = 'submit-status';
+
+      try {
+        fetch(GAS_TRACKER_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({
+            type: 'submission',
+            sessionId: SESSION_ID,
+            nickname: nickname,
+            url: url,
+            comment: comment,
+            timestamp: new Date().toISOString()
+          })
+        });
+        // no-cors なのでレスポンスは読めない → 楽観的に成功扱い
+        setTimeout(() => {
+          statusEl.textContent = '✓ 提出しました！ギャラリーに反映されるまで数秒お待ちください。';
+          statusEl.className = 'submit-status success';
+          btn.disabled = false;
+          // 2秒後にギャラリー再読み込み
+          setTimeout(() => loadGallery(true), 1500);
+        }, 400);
+      } catch (e) {
+        statusEl.textContent = '⚠ 送信に失敗しました: ' + e.message;
+        statusEl.className = 'submit-status error';
+        btn.disabled = false;
+      }
+
+      return false;
+    }
+
+    // JSONP でクロスオリジン GET
+    let _galleryCbCounter = 0;
+    function loadGallery(showSpinner) {
+      if (!GAS_TRACKER_URL) {
+        renderGallery([]);
+        return;
+      }
+      const refreshBtn = document.getElementById('refreshBtn');
+      if (showSpinner && refreshBtn) refreshBtn.classList.add('spinning');
+
+      const cbName = '_galleryCb_' + (++_galleryCbCounter) + '_' + Date.now();
+      const timeoutId = setTimeout(() => cleanup(true), 10000);
+
+      function cleanup(timedOut) {
+        clearTimeout(timeoutId);
+        const s = document.getElementById(cbName + '_script');
+        if (s) s.remove();
+        delete window[cbName];
+        if (refreshBtn) refreshBtn.classList.remove('spinning');
+        if (timedOut) console.warn('Gallery load timed out');
+      }
+
+      window[cbName] = function (data) {
+        cleanup(false);
+        renderGallery((data && data.submissions) || []);
+      };
+
+      const sep = GAS_TRACKER_URL.indexOf('?') >= 0 ? '&' : '?';
+      const src = GAS_TRACKER_URL + sep + 'action=submissions&callback=' + cbName
+        + '&_t=' + Date.now();
+      const script = document.createElement('script');
+      script.id = cbName + '_script';
+      script.src = src;
+      script.onerror = () => cleanup(true);
+      document.head.appendChild(script);
+    }
+
+    function renderGallery(submissions) {
+      const grid = document.getElementById('galleryGrid');
+      const countEl = document.getElementById('galleryCount');
+      if (!grid) return;
+
+      countEl.textContent = submissions.length;
+
+      if (submissions.length === 0) {
+        grid.innerHTML = '<div class="gallery-empty"><span class="emoji">🎨</span>'
+          + 'まだ提出がありません。最初の1人になりましょう！</div>';
+        return;
+      }
+
+      grid.innerHTML = submissions.map(s => {
+        const initial = (s.nickname || '?').charAt(0).toUpperCase();
+        const time = formatRelativeTime(s.timestamp);
+        const urlDisplay = shortenUrl(s.url);
+        return '<a class="gal-card" href="' + escAttr(s.url) + '" target="_blank" rel="noopener">'
+          + '<div class="gal-head">'
+          + '<div class="gal-avatar">' + escHtml(initial) + '</div>'
+          + '<div style="flex:1;min-width:0;">'
+          + '<div class="gal-nickname">' + escHtml(s.nickname || '匿名さん') + '</div>'
+          + '<div class="gal-time">' + time + '</div>'
+          + '</div>'
+          + '</div>'
+          + '<div class="gal-comment">' + (s.comment ? escHtml(s.comment) : '<span style="color:rgba(255,255,255,0.2)">（コメントなし）</span>') + '</div>'
+          + '<div class="gal-url-tag">🔗 ' + escHtml(urlDisplay) + '</div>'
+          + '</a>';
+      }).join('');
+    }
+
+    function shortenUrl(url) {
+      if (!url) return '';
+      if (url.length <= 40) return url;
+      return url.slice(0, 30) + '…' + url.slice(-8);
+    }
+
+    function formatRelativeTime(iso) {
+      try {
+        const t = new Date(iso).getTime();
+        const diff = Date.now() - t;
+        if (diff < 60_000) return 'たった今';
+        if (diff < 3600_000) return Math.floor(diff / 60_000) + '分前';
+        if (diff < 86400_000) return Math.floor(diff / 3600_000) + '時間前';
+        const d = new Date(iso);
+        return (d.getMonth() + 1) + '/' + d.getDate() + ' '
+          + String(d.getHours()).padStart(2, '0') + ':'
+          + String(d.getMinutes()).padStart(2, '0');
+      } catch (_) { return ''; }
+    }
+
+    function escHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+    function escAttr(s) { return escHtml(s); }
+
+    // 初回ロード & 自動更新（30秒ごと）
+    document.addEventListener('DOMContentLoaded', () => {
+      loadGallery(false);
+      setInterval(() => loadGallery(false), 30_000);
+    });
+
+    // ── Gamification ──
+
+    const TOTAL_STEPS = 11;
+    let completedSteps = 0;
+
+    // 紙吹雪キャンバスを追加
+    const canvas = document.createElement('canvas');
+    canvas.id = 'confetti-canvas';
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+
+    // トースト要素
+    const toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.innerHTML = `<span class="toast-icon">✅</span><div><div class="toast-text" id="toast-text"></div><div class="toast-sub" id="toast-sub"></div></div>`;
+    document.body.appendChild(toast);
+
+    // トースト表示
+    function showToast(text, sub) {
+      document.getElementById('toast-text').textContent = text;
+      document.getElementById('toast-sub').textContent = sub;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+
+    // 進捗更新
+    function updateProgress() {
+      const pct = (completedSteps / TOTAL_STEPS) * 100;
+      document.getElementById('progress-bar').style.width = pct + '%';
+      document.getElementById('progress-label').textContent = completedSteps + ' / ' + TOTAL_STEPS;
+    }
+
+    // 紙吹雪（軽量版）
+    let confettiParticles = [];
+    function launchConfetti(x, y) {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const colors = ['#A51E6D', '#D470AA', '#039578', '#7C3AED', '#FF5757', '#FFD700'];
+      for (let i = 0; i < 48; i++) {
+        confettiParticles.push({
+          x: x || canvas.width / 2,
+          y: y || canvas.height * 0.4,
+          vx: (Math.random() - 0.5) * 8,
+          vy: Math.random() * -6 - 2,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          size: Math.random() * 7 + 4,
+          rot: Math.random() * 360,
+          rotV: (Math.random() - 0.5) * 6,
+          life: 1
+        });
+      }
+      animateConfetti();
+    }
+    let confettiRaf;
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettiParticles = confettiParticles.filter(p => p.life > 0);
+      confettiParticles.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.vy += 0.25;
+        p.rot += p.rotV; p.life -= 0.018;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+        ctx.restore();
+      });
+      if (confettiParticles.length > 0) confettiRaf = requestAnimationFrame(animateConfetti);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // ステップヘッダーに✓マークを注入 & 完了ボタンを追加
+    const stepBlocks = document.querySelectorAll('.step-block');
+    const toastMessages = [
+      ['ナイス！', 'その調子で進みましょう 🎉'],
+      ['いい感じ！', '着実に前進しています'],
+      ['完璧です！', 'どんどん行きましょう'],
+      ['できました！', 'スムーズですね'],
+      ['素晴らしい！', 'もう少しで完成です'],
+      ['やりましたね！', '次のステップへ'],
+      ['すごい！', 'ここまで来たら本番です'],
+      ['クリア！', '集中力が続いています'],
+      ['完了！', 'あと少し！'],
+      ['最高です！', 'ゴールが見えてきました'],
+      ['全部完了！', 'お疲れさまでした 🎊'],
+    ];
+
+    stepBlocks.forEach((block, idx) => {
+      // ヘッダーに✓マークを追加
+      const header = block.querySelector('.step-header');
+      if (header) {
+        const check = document.createElement('span');
+        check.className = 'step-header-check';
+        check.textContent = '✓';
+        header.appendChild(check);
+      }
+
+      // 完了ボタンを追加
+      const body = block.querySelector('.step-body');
+      if (body) {
+        const btn = document.createElement('button');
+        btn.className = 'complete-btn';
+        btn.innerHTML = `<span class="cb-icon">○</span> このステップを完了する`;
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('done')) return;
+          btn.classList.add('done');
+          btn.innerHTML = `<span class="cb-icon">✓</span> 完了！`;
+          block.classList.add('completed');
+          completedSteps++;
+          updateProgress();
+          trackStep(block.id);
+
+          const msg = toastMessages[Math.min(completedSteps - 1, toastMessages.length - 1)];
+          showToast(msg[0], msg[1]);
+
+          // Part 2 のステップならインジケーターを更新
+          const p2Match = block.id.match(/^p2s(\d+)$/);
+          if (p2Match) updateStepIndicator(parseInt(p2Match[1]));
+
+          // 大きな節目で紙吹雪
+          if (completedSteps === 4 || completedSteps === TOTAL_STEPS) {
+            launchConfetti();
+          }
+        });
+        body.appendChild(btn);
+      }
+    });
+
+    updateProgress();
+
+  </script>
+
+  <!-- キーワードゲート ロジック -->
+  <script>
+    (function initGate() {
+      const STORAGE_KEY = 'gas_site_unlocked_2026';
+      const gate = document.getElementById('kwGate');
+
+      // すでにセッション内で解除済みならゲートを即非表示
+      if (sessionStorage.getItem(STORAGE_KEY) === 'yes') {
+        gate.style.display = 'none';
+        return;
+      }
+
+      // ページ本体はゲート表示中はスクロール禁止
+      document.body.style.overflow = 'hidden';
+    })();
+
+    function checkKeyword() {
+      const input = document.getElementById('kwInput');
+      const error = document.getElementById('kwError');
+      const gate  = document.getElementById('kwGate');
+
+      if (input.value.trim() === SITE_KEYWORD) {
+        // 正解 → フェードアウト
+        sessionStorage.setItem('gas_site_unlocked_2026', 'yes');
+        window.scrollTo(0, 0);
+        gate.style.transition = 'opacity .5s ease';
+        gate.style.opacity = '0';
+        document.body.style.overflow = '';
+        setTimeout(() => { gate.style.display = 'none'; }, 520);
+      } else {
+        // 不正解 → エラー表示 + 振動
+        error.style.opacity = '1';
+        input.classList.remove('kw-shake');
+        void input.offsetWidth; // reflow
+        input.classList.add('kw-shake');
+        input.select();
+      }
+    }
+
+    function togglePw() {
+      const inp = document.getElementById('kwInput');
+      const icon = document.getElementById('eyeIcon');
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
+      } else {
+        inp.type = 'password';
+        icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+      }
+    }
+  </script>
+</body>
+
+</html>

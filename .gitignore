@@ -1,0 +1,6 @@
+# lecture_site.html 以外はすべて除外
+*
+
+# lecture_site.html だけ許可
+!lecture_site.html
+!.gitignore
