@@ -2692,7 +2692,8 @@
           <div class="nav-section-label">発展</div>
           <a class="nav-link" href="#advanced"><span class="nav-dot"></span>もっとできること</a>
           <a class="nav-link" href="#adv-mail"><span class="nav-dot"></span>メール自動送信</a>
-          <a class="nav-link" href="#adv-clasp"><span class="nav-dot"></span>Clasp 入門</a>
+          <a class="nav-link" href="#adv-calendar"><span class="nav-dot"></span>カレンダー連携</a>
+          <a class="nav-link" href="#adv-clasp"><span class="nav-dot"></span>Tips</a>
         </div>
       </nav>
       <div class="sidebar-footer">
@@ -3530,6 +3531,19 @@
 
 修正したコードも全文で出力してください。</pre>
                 </div>
+
+                <div class="notice" style="border-color:rgba(139,92,246,0.35);background:var(--purple-9);margin-top:4px;">
+                  <div class="ni-wrap">📸</div>
+                  <div>
+                    <strong>スクリーンショットを貼る方法もあります</strong><br>
+                    <span style="font-size:13px;line-height:1.8;">
+                      エラー画面をそのままスクリーンショットして、Geminiの入力欄に貼り付けるだけでもOKです。<br>
+                      テキストをコピーするのが難しいときに便利です。<br>
+                      <span style="color:var(--purple);font-weight:700;">Mac：⌘ + Shift + 4 → ドラッグで範囲選択 → クリップボードにコピー → Geminiに貼り付け</span><br>
+                      <span style="color:var(--purple);font-weight:700;">Windows：Win + Shift + S → ドラッグで範囲選択 → Geminiに貼り付け</span>
+                    </span>
+                  </div>
+                </div>
               </div>
             </details>
 
@@ -3691,10 +3705,66 @@
 
         <!-- メール自動送信 -->
         <h3 class="sub" id="adv-mail" style="border-left-color:var(--purple);">✉️ お礼メールを自動送信する</h3>
-        <p class="body">スプレッドシートのメールアドレス列を読んで、全員に自動でメールを送れます。<code
-            style="background:var(--purple-9);color:var(--purple);padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:13px;">MailApp.sendEmail()</code>
-          を使うだけです。</p>
+        <p class="body">件名・本文はスプレッドシートに書いておくだけ。送信ボタンを押すと全員に一斉送信されます。コードを触らずに文章を変えられるのがポイントです。</p>
 
+        <!-- スプシの構成 -->
+        <p style="font-size:14px;font-weight:700;color:var(--ink);margin:20px 0 10px;">① スプレッドシートをこのように準備する</p>
+
+        <p style="font-size:13px;color:var(--ink-s);margin-bottom:8px;">「<strong>メール設定</strong>」シート — 件名と本文をここに書く</p>
+        <div class="fav-example fade-up" style="margin-bottom:16px;">
+          <div class="fav-ex-header" style="grid-template-columns: 80px 1fr;">
+            <div class="fav-col-head">A列</div>
+            <div class="fav-col-head">B列（ここに文章を書く）</div>
+          </div>
+          <div class="fav-row" style="grid-template-columns: 80px 1fr;">
+            <span class="fav-cell" style="font-weight:700;">件名</span>
+            <span class="fav-cell">研修へのご参加ありがとうございました</span>
+          </div>
+          <div class="fav-row" style="grid-template-columns: 80px 1fr;">
+            <span class="fav-cell" style="font-weight:700;">本文</span>
+            <span class="fav-cell">〇〇さん、先日は研修にご参加いただきありがとうございました。今後ともよろしくお願いいたします。</span>
+          </div>
+        </div>
+
+        <p style="font-size:13px;color:var(--ink-s);margin-bottom:8px;">「<strong>参加者リスト</strong>」シート — 宛先データ</p>
+        <div class="fav-example fade-up" style="margin-bottom:20px;">
+          <div class="fav-ex-header" style="grid-template-columns: 40px 1fr 1fr;">
+            <div class="fav-col-head" style="opacity:.5;">行</div>
+            <div class="fav-col-head">A列</div>
+            <div class="fav-col-head">B列</div>
+          </div>
+          <div class="fav-row" style="grid-template-columns: 40px 1fr 1fr; background:#f0f4ff;">
+            <span class="fav-cell" style="font-weight:700;color:var(--ink-m);font-size:12px;">1行目</span>
+            <span class="fav-cell" style="font-weight:700;color:var(--ink-m);">名前（ヘッダー）</span>
+            <span class="fav-cell" style="font-weight:700;color:var(--ink-m);">メールアドレス（ヘッダー）</span>
+          </div>
+          <div class="fav-row" style="grid-template-columns: 40px 1fr 1fr;">
+            <span class="fav-cell" style="font-weight:700;color:var(--brand);font-size:12px;">2行目</span>
+            <span class="fav-cell">田中 花子</span>
+            <span class="fav-cell">hanako@example.com</span>
+          </div>
+          <div class="fav-row" style="grid-template-columns: 40px 1fr 1fr;">
+            <span class="fav-cell" style="font-weight:700;color:var(--brand);font-size:12px;">3行目</span>
+            <span class="fav-cell">佐藤 一郎</span>
+            <span class="fav-cell">ichiro@example.com</span>
+          </div>
+          <div class="fav-row fav-row--hint" style="grid-template-columns: 40px 1fr 1fr;">
+            <span class="fav-cell" style="font-size:12px;color:var(--ink-m);">…</span>
+            <span class="fav-cell" style="color:var(--ink-m);">以降も追加OK</span>
+            <span class="fav-cell"></span>
+          </div>
+        </div>
+        <div class="notice" style="margin-bottom:20px;">
+          <div class="ni-wrap">📋</div>
+          <span><strong>1行目はヘッダー行</strong>（見出し）として扱われます。コードが自動でスキップするので、送信されるのは <strong>2行目以降</strong> のデータのみです。</span>
+        </div>
+
+        <!-- コード -->
+        <p style="font-size:14px;font-weight:700;color:var(--ink);margin:20px 0 10px;">② GASにコードを貼り付ける</p>
+        <div class="notice" style="margin-bottom:14px;">
+          <div class="ni-wrap">💡</div>
+          <span>スプレッドシートを開くと上部メニューに <strong>「📧 メール送信」</strong> が自動で追加されます。そこからワンクリックで送信できます。</span>
+        </div>
         <div class="code-wrap fade-up">
           <div class="code-header">
             <div class="traffic-lights">
@@ -3705,46 +3775,112 @@
             <span class="code-lang">JavaScript (Code.gs) — メール自動送信</span>
             <button class="copy-btn" onclick="copyCode(this)">コピー</button>
           </div>
-          <pre><code><span class="c-kw">function</span> <span class="c-fn">sendThankYouEmails</span><span class="c-w">() {</span>
-  <span class="c-kw">const</span> <span class="c-var">sheet</span> <span class="c-w">=</span> <span class="c-fn">SpreadsheetApp</span><span class="c-w">.</span><span class="c-fn">getActiveSpreadsheet</span><span class="c-w">()</span>
-                               <span class="c-w">.</span><span class="c-fn">getSheetByName</span><span class="c-w">(</span><span class="c-str">"満足度調査"</span><span class="c-w">);</span>
-  <span class="c-kw">const</span> <span class="c-var">rows</span>  <span class="c-w">=</span> <span class="c-var">sheet</span><span class="c-w">.</span><span class="c-fn">getDataRange</span><span class="c-w">().</span><span class="c-fn">getValues</span><span class="c-w">();</span>
+          <pre><code><span class="c-comment">// スプレッドシートを開いたとき、上部メニューに「📧 メール送信」を追加する</span>
+<span class="c-kw">function</span> <span class="c-fn">onOpen</span><span class="c-w">() {</span>
+  <span class="c-fn">SpreadsheetApp</span><span class="c-w">.</span><span class="c-fn">getUi</span><span class="c-w">()</span>
+    <span class="c-w">.</span><span class="c-fn">createMenu</span><span class="c-w">(</span><span class="c-str">"📧 メール送信"</span><span class="c-w">)</span>
+    <span class="c-w">.</span><span class="c-fn">addItem</span><span class="c-w">(</span><span class="c-str">"お礼メールを一斉送信する"</span><span class="c-w">,</span> <span class="c-str">"sendThankYouEmails"</span><span class="c-w">)</span>
+    <span class="c-w">.</span><span class="c-fn">addToUi</span><span class="c-w">();</span>
+<span class="c-w">}</span>
 
-  <span class="c-comment">// 1行目はヘッダーなので2行目（index 1）から処理する</span>
+<span class="c-comment">// メール送信の本体</span>
+<span class="c-kw">function</span> <span class="c-fn">sendThankYouEmails</span><span class="c-w">() {</span>
+  <span class="c-kw">const</span> <span class="c-var">ss</span> <span class="c-w">=</span> <span class="c-fn">SpreadsheetApp</span><span class="c-w">.</span><span class="c-fn">getActiveSpreadsheet</span><span class="c-w">();</span>
+
+  <span class="c-comment">// 「メール設定」シートから件名・本文を取得</span>
+  <span class="c-kw">const</span> <span class="c-var">config</span>  <span class="c-w">=</span> <span class="c-var">ss</span><span class="c-w">.</span><span class="c-fn">getSheetByName</span><span class="c-w">(</span><span class="c-str">"メール設定"</span><span class="c-w">).</span><span class="c-fn">getDataRange</span><span class="c-w">().</span><span class="c-fn">getValues</span><span class="c-w">();</span>
+  <span class="c-kw">const</span> <span class="c-var">subject</span> <span class="c-w">=</span> <span class="c-var">config</span><span class="c-w">[0][1];</span> <span class="c-comment">// B1: 件名</span>
+  <span class="c-kw">const</span> <span class="c-var">body</span>    <span class="c-w">=</span> <span class="c-var">config</span><span class="c-w">[1][1];</span> <span class="c-comment">// B2: 本文</span>
+
+  <span class="c-comment">// 「参加者リスト」シートから宛先を取得</span>
+  <span class="c-kw">const</span> <span class="c-var">rows</span> <span class="c-w">=</span> <span class="c-var">ss</span><span class="c-w">.</span><span class="c-fn">getSheetByName</span><span class="c-w">(</span><span class="c-str">"参加者リスト"</span><span class="c-w">).</span><span class="c-fn">getDataRange</span><span class="c-w">().</span><span class="c-fn">getValues</span><span class="c-w">();</span>
+
   <span class="c-kw">for</span> <span class="c-w">(</span><span class="c-kw">let</span> <span class="c-var">i</span> <span class="c-w">= 1;</span> <span class="c-var">i</span> <span class="c-w">&lt;</span> <span class="c-var">rows</span><span class="c-w">.length;</span> <span class="c-var">i</span><span class="c-w">++) {</span>
+    <span class="c-kw">const</span> <span class="c-var">name</span>  <span class="c-w">=</span> <span class="c-var">rows</span><span class="c-w">[</span><span class="c-var">i</span><span class="c-w">][0];</span> <span class="c-comment">// A列: 名前</span>
     <span class="c-kw">const</span> <span class="c-var">email</span> <span class="c-w">=</span> <span class="c-var">rows</span><span class="c-w">[</span><span class="c-var">i</span><span class="c-w">][1];</span> <span class="c-comment">// B列: メールアドレス</span>
-    <span class="c-kw">const</span> <span class="c-var">name</span>  <span class="c-w">=</span> <span class="c-var">rows</span><span class="c-w">[</span><span class="c-var">i</span><span class="c-w">][2];</span> <span class="c-comment">// C列: 名前</span>
 
     <span class="c-fn">MailApp</span><span class="c-w">.</span><span class="c-fn">sendEmail</span><span class="c-w">({</span>
       <span class="c-var">to</span><span class="c-w">:</span>      <span class="c-var">email</span><span class="c-w">,</span>
-      <span class="c-var">subject</span><span class="c-w">:</span> <span class="c-str">"【ご参加ありがとうございました】"</span><span class="c-w">,</span>
-      <span class="c-var">body</span><span class="c-w">:</span>    <span class="c-str">`</span><span class="c-w">${</span><span class="c-var">name</span><span class="c-w">}</span><span class="c-str"> さん、\n\nご参加いただきありがとうございました。\nアンケートへのご回答も感謝します。`</span>
+      <span class="c-var">subject</span><span class="c-w">:</span> <span class="c-var">subject</span><span class="c-w">,</span>
+      <span class="c-var">body</span><span class="c-w">:</span>    <span class="c-var">name</span> <span class="c-w">+</span> <span class="c-str">" さん\n\n"</span> <span class="c-w">+</span> <span class="c-var">body</span>
     <span class="c-w">});</span>
   <span class="c-w">}</span>
+  <span class="c-fn">SpreadsheetApp</span><span class="c-w">.</span><span class="c-fn">getUi</span><span class="c-w">().</span><span class="c-fn">alert</span><span class="c-w">(</span><span class="c-str">"✅ 送信完了！"</span><span class="c-w">);</span>
 <span class="c-w">}</span></code></pre>
         </div>
 
-        <div class="notice" style="border-color:var(--purple);background:var(--purple-9);">
-          <div class="ni-wrap" style="background:var(--purple-gradient);">💡</div>
-          <span>初回実行時に「Gmailへのアクセス許可」が求められます。許可すると、Googleアカウントのメールアドレスから送信されます。1日あたりの送信上限は100通（無料アカウント）です。</span>
+        <!-- 使い方 -->
+        <p style="font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px;">③ 送信するとき</p>
+        <div class="arrow-step fade-up">
+          <span class="as">スプレッドシートを開く<br><span style="font-size:12px;color:var(--ink-m);">※開き直すとメニューが追加される</span></span>
+          <span class="ar">→</span>
+          <span class="as">上部メニュー <strong>「📧 メール送信」</strong></span>
+          <span class="ar">→</span>
+          <span class="as"><strong>「お礼メールを一斉送信する」</strong></span>
+          <span class="ar">→</span>
+          <span class="as">「✅ 送信完了！」<br>ダイアログが出たら成功</span>
         </div>
 
-        <!-- Clasp -->
-        <h3 class="sub" id="adv-clasp" style="border-left-color:var(--purple);margin-top:48px;">🚀 もっと本格的に：Claspを使ってみる
-        </h3>
-        <p class="body">GASに慣れてきたら、<strong>Clasp</strong>（クラスプ）を使うとさらに快適に開発できます。</p>
+        <div class="notice fade-up" style="border-color:var(--brand);background:var(--brand-9);margin-top:16px;">
+          <div class="ni-wrap">✅</div>
+          <div>
+            <strong>文章を変えたいときは</strong><br>
+            <span style="font-size:13px;">「メール設定」シートのB1（件名）・B2（本文）を書き換えるだけ。コードを触らずに文章を変更できます。</span>
+          </div>
+        </div>
 
-        <div class="info-grid fade-up" style="margin:20px 0;">
-          <div class="info-card">
-            <div class="ic-num">Clasp とは</div>
-            <div class="ic-title">💻 ローカルでGASを書く</div>
-            <div class="ic-body">VSCodeなど自分のエディタでコードを書いて、GASにプッシュできる。補完・フォーマット・AIの支援がフル活用できる</div>
+        <div class="notice fade-up" style="margin-top:10px;">
+          <div class="ni-wrap">💡</div>
+          <span>初回実行時に「Gmailへのアクセス許可」が求められます。許可すると、自分のGoogleアカウントのメールアドレスから送信されます。1日あたりの送信上限は100通（無料アカウント）です。</span>
+        </div>
+
+        <!-- カレンダー連携 -->
+        <h3 class="sub" id="adv-calendar" style="border-left-color:var(--purple);margin-top:48px;">📅 Googleカレンダーに自動登録する</h3>
+        <p class="body">スプレッドシートに入力したイベント情報を、GASを使ってGoogleカレンダーに<strong>自動で登録</strong>できます。手入力の手間ゼロ！</p>
+
+        <div class="notice fade-up" style="margin-bottom:20px;">
+          <div class="ni-wrap">💡</div>
+          <div>
+            <strong>こんな場面で使えます</strong><br>
+            <span style="font-size:13px;">研修・面接・ミーティングの日程をスプレッドシートで管理 → ボタン一つでカレンダーに一括登録</span>
           </div>
-          <div class="info-card">
-            <div class="ic-num">できること</div>
-            <div class="ic-title">🔀 Gitでバージョン管理</div>
-            <div class="ic-body">GitHubと連携すれば変更履歴が残り、チームでの共同開発もしやすくなる。スクリプトを「資産」として管理できる</div>
+        </div>
+
+        <p style="font-size:14px;font-weight:700;color:var(--ink);margin:0 0 10px;">スプレッドシートのイメージ</p>
+        <div class="fav-example fade-up" style="margin-bottom:20px;">
+          <div class="fav-ex-header" style="grid-template-columns:40px 1fr 1fr 1fr;">
+            <div class="fav-col-head" style="opacity:.5;">行</div>
+            <div class="fav-col-head">A列</div>
+            <div class="fav-col-head">B列</div>
+            <div class="fav-col-head">C列</div>
           </div>
+          <div class="fav-row" style="grid-template-columns:40px 1fr 1fr 1fr;background:#f0f4ff;">
+            <span class="fav-cell" style="font-weight:700;color:var(--ink-m);font-size:12px;">1行目</span>
+            <span class="fav-cell" style="font-weight:700;color:var(--ink-m);">イベント名</span>
+            <span class="fav-cell" style="font-weight:700;color:var(--ink-m);">開始日時</span>
+            <span class="fav-cell" style="font-weight:700;color:var(--ink-m);">終了日時</span>
+          </div>
+          <div class="fav-row" style="grid-template-columns:40px 1fr 1fr 1fr;">
+            <span class="fav-cell" style="font-weight:700;color:var(--brand);font-size:12px;">2行目</span>
+            <span class="fav-cell">新入社員研修</span>
+            <span class="fav-cell">2026/07/01 10:00</span>
+            <span class="fav-cell">2026/07/01 12:00</span>
+          </div>
+          <div class="fav-row" style="grid-template-columns:40px 1fr 1fr 1fr;">
+            <span class="fav-cell" style="font-weight:700;color:var(--brand);font-size:12px;">3行目</span>
+            <span class="fav-cell">採用面接（田中さん）</span>
+            <span class="fav-cell">2026/07/02 14:00</span>
+            <span class="fav-cell">2026/07/02 15:00</span>
+          </div>
+          <div class="fav-row fav-row--hint" style="grid-template-columns:40px 1fr 1fr 1fr;">
+            <span class="fav-cell" style="font-size:12px;color:var(--ink-m);">…</span>
+            <span class="fav-cell" style="color:var(--ink-m);">以降も追加OK</span>
+            <span class="fav-cell"></span><span class="fav-cell"></span>
+          </div>
+        </div>
+        <div class="notice" style="margin-bottom:20px;">
+          <div class="ni-wrap">📋</div>
+          <span><strong>1行目はヘッダー行</strong>として扱われます。登録されるのは <strong>2行目以降</strong> のデータのみです。</span>
         </div>
 
         <div class="code-wrap fade-up">
@@ -3754,25 +3890,59 @@
               <div class="tl tl-yellow"></div>
               <div class="tl tl-green"></div>
             </div>
-            <span class="code-lang">Terminal — Claspのインストール</span>
+            <span class="code-lang">JavaScript (Code.gs) — カレンダー自動登録</span>
             <button class="copy-btn" onclick="copyCode(this)">コピー</button>
           </div>
-          <pre><code><span class="c-comment"># Claspをインストール</span>
-<span class="c-fn">npm</span> <span class="c-w">install -g @google/clasp</span>
+          <pre><code><span class="c-comment">// スプレッドシートを開いたとき、上部メニューに「📅 カレンダー登録」を追加する</span>
+<span class="c-kw">function</span> <span class="c-fn">onOpen</span><span class="c-w">() {</span>
+  <span class="c-fn">SpreadsheetApp</span><span class="c-w">.</span><span class="c-fn">getUi</span><span class="c-w">()</span>
+    <span class="c-w">.</span><span class="c-fn">createMenu</span><span class="c-w">(</span><span class="c-str">"📅 カレンダー登録"</span><span class="c-w">)</span>
+    <span class="c-w">.</span><span class="c-fn">addItem</span><span class="c-w">(</span><span class="c-str">"イベントをカレンダーに登録する"</span><span class="c-w">,</span> <span class="c-str">"addToCalendar"</span><span class="c-w">)</span>
+    <span class="c-w">.</span><span class="c-fn">addToUi</span><span class="c-w">();</span>
+<span class="c-w">}</span>
 
-<span class="c-comment"># Googleアカウントでログイン</span>
-<span class="c-fn">clasp</span> <span class="c-w">login</span>
+<span class="c-comment">// カレンダー登録の本体</span>
+<span class="c-kw">function</span> <span class="c-fn">addToCalendar</span><span class="c-w">() {</span>
+  <span class="c-kw">const</span> <span class="c-var">sheet</span>    <span class="c-w">=</span> <span class="c-fn">SpreadsheetApp</span><span class="c-w">.</span><span class="c-fn">getActiveSpreadsheet</span><span class="c-w">()</span>
+                              <span class="c-w">.</span><span class="c-fn">getSheetByName</span><span class="c-w">(</span><span class="c-str">"イベント一覧"</span><span class="c-w">);</span>
+  <span class="c-kw">const</span> <span class="c-var">rows</span>     <span class="c-w">=</span> <span class="c-var">sheet</span><span class="c-w">.</span><span class="c-fn">getDataRange</span><span class="c-w">().</span><span class="c-fn">getValues</span><span class="c-w">();</span>
+  <span class="c-kw">const</span> <span class="c-var">calendar</span> <span class="c-w">=</span> <span class="c-fn">CalendarApp</span><span class="c-w">.</span><span class="c-fn">getDefaultCalendar</span><span class="c-w">();</span>
 
-<span class="c-comment"># 既存のGASプロジェクトをローカルにクローン</span>
-<span class="c-fn">clasp</span> <span class="c-w">clone &lt;スクリプトID&gt;</span>
+  <span class="c-comment">// 1行目はヘッダーなので2行目（index 1）から処理</span>
+  <span class="c-kw">for</span> <span class="c-w">(</span><span class="c-kw">let</span> <span class="c-var">i</span> <span class="c-w">= 1;</span> <span class="c-var">i</span> <span class="c-w">&lt;</span> <span class="c-var">rows</span><span class="c-w">.length;</span> <span class="c-var">i</span><span class="c-w">++) {</span>
+    <span class="c-kw">const</span> <span class="c-var">title</span> <span class="c-w">=</span> <span class="c-var">rows</span><span class="c-w">[</span><span class="c-var">i</span><span class="c-w">][0];</span> <span class="c-comment">// A列：イベント名</span>
+    <span class="c-kw">const</span> <span class="c-var">start</span> <span class="c-w">=</span> <span class="c-kw">new</span> <span class="c-fn">Date</span><span class="c-w">(</span><span class="c-var">rows</span><span class="c-w">[</span><span class="c-var">i</span><span class="c-w">][1]);</span> <span class="c-comment">// B列：開始日時</span>
+    <span class="c-kw">const</span> <span class="c-var">end</span>   <span class="c-w">=</span> <span class="c-kw">new</span> <span class="c-fn">Date</span><span class="c-w">(</span><span class="c-var">rows</span><span class="c-w">[</span><span class="c-var">i</span><span class="c-w">][2]);</span> <span class="c-comment">// C列：終了日時</span>
 
-<span class="c-comment"># 変更をGASにプッシュ</span>
-<span class="c-fn">clasp</span> <span class="c-w">push</span></code></pre>
+    <span class="c-var">calendar</span><span class="c-w">.</span><span class="c-fn">createEvent</span><span class="c-w">(</span><span class="c-var">title</span><span class="c-w">,</span> <span class="c-var">start</span><span class="c-w">,</span> <span class="c-var">end</span><span class="c-w">);</span>
+  <span class="c-w">}</span>
+  <span class="c-fn">SpreadsheetApp</span><span class="c-w">.</span><span class="c-fn">getUi</span><span class="c-w">().</span><span class="c-fn">alert</span><span class="c-w">(</span><span class="c-str">"✅ カレンダーへの登録が完了しました！"</span><span class="c-w">);</span>
+<span class="c-w">}</span></code></pre>
         </div>
 
-        <div class="notice fade-up">
-          <div class="ni-wrap">📌</div>
-          <span>Claspは「GASをもっと本格的に使いたい」と思ったタイミングで始めれば十分です。今日のハンズオンが終わってからでも遅くありません。まず今日の内容を自分の業務に転用することを優先しましょう。</span>
+        <ol class="proc fade-up">
+          <li><span class="pnum purple">1</span>スプレッドシートのシート名を <strong>「イベント一覧」</strong> にして、A・B・C列にデータを入力</li>
+          <li><span class="pnum purple">2</span>コードをGASエディタに貼り付けて保存（<kbd>Ctrl</kbd>+<kbd>S</kbd>）</li>
+          <li><span class="pnum purple">3</span>スプレッドシートを開き直すと上部に <strong>「📅 カレンダー登録」</strong> メニューが追加される</li>
+          <li><span class="pnum purple">4</span>「イベントをカレンダーに登録する」をクリック</li>
+          <li><span class="pnum purple">5</span>Googleカレンダーを開いて、イベントが追加されていたら成功！</li>
+        </ol>
+
+        <!-- Clasp Tips -->
+        <h3 class="sub" id="adv-clasp" style="border-left-color:var(--purple);margin-top:48px;">🚀 もっと本格的に：Claspを使ってみる</h3>
+        <p class="body">GASに慣れてきたら、<strong>Clasp</strong>（クラスプ）というツールを使うと、さらに快適にGASの開発ができます。</p>
+
+        <!-- Claspとは？ わかりやすく -->
+        <div class="notice fade-up" style="border-color:var(--purple);background:var(--purple-9);">
+          <div class="ni-wrap">🚀</div>
+          <div>
+            <strong>Claspとは？</strong><br>
+            <span style="font-size:13px;line-height:1.8;">
+              GASのコードを、ブラウザのエディタではなく<strong>パソコン上で書ける</strong>ようにするツールです。
+              CursorやClaude CodeなどのAIツールと組み合わせると開発がとても快適になります。<br>
+              今日の内容に慣れてきたら、ぜひ調べてみてください。キーワードは <span class="ic">Clasp GAS</span> です。
+            </span>
+          </div>
         </div>
 
       </section>
@@ -3922,7 +4092,11 @@
 
     // ── Copy button ──
     function copyCode(btn) {
-      const pre = btn.closest('.code-wrap').querySelector('pre');
+      // .code-wrap と .prompt-wrap の両方に対応
+      const wrap = btn.closest('.code-wrap') || btn.closest('.prompt-wrap');
+      if (!wrap) return;
+      const pre = wrap.querySelector('pre');
+      if (!pre) return;
       const text = pre.innerText;
       navigator.clipboard.writeText(text).then(() => {
         btn.textContent = '✓ コピー済み';
