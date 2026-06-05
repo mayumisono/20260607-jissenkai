@@ -2664,7 +2664,8 @@
           <a class="nav-link" href="#gas-what"><span class="nav-dot"></span>GASって何？</a>
           <a class="nav-link" href="#gas-can"><span class="nav-dot"></span>GASでできること</a>
           <a class="nav-link" href="#gas-arch"><span class="nav-dot"></span>全体構造</a>
-          <a class="nav-link" href="#gas-gemini"><span class="nav-dot"></span>Geminiを使う</a>
+          <a class="nav-link" href="#gas-func"><span class="nav-dot"></span>関数って何？</a>
+          <a class="nav-link" href="#gas-deploy"><span class="nav-dot"></span>デプロイとは？</a>
         </div>
         <div class="nav-section">
           <div class="nav-section-label">Section 2 — Part 1 基礎（25分）</div>
@@ -2684,14 +2685,14 @@
           <a class="nav-link" href="#p2s7"><span class="nav-dot"></span>Step 7 自動更新を体験</a>
         </div>
         <div class="nav-section">
+          <div class="nav-section-label">提出 &amp; 共有</div>
+          <a class="nav-link" href="#submit"><span class="nav-dot"></span>作品を提出する</a>
+        </div>
+        <div class="nav-section">
           <div class="nav-section-label">発展</div>
           <a class="nav-link" href="#advanced"><span class="nav-dot"></span>もっとできること</a>
           <a class="nav-link" href="#adv-mail"><span class="nav-dot"></span>メール自動送信</a>
           <a class="nav-link" href="#adv-clasp"><span class="nav-dot"></span>Clasp 入門</a>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-label">提出 &amp; 共有</div>
-          <a class="nav-link" href="#submit"><span class="nav-dot"></span>作品を提出する</a>
         </div>
       </nav>
       <div class="sidebar-footer">
@@ -2847,89 +2848,47 @@
           </div>
         </div>
 
-        <h3 class="sub" id="gas-gemini">Geminiにコードを作ってもらう</h3>
+        <h3 class="sub" id="gas-func">GASの「関数」って何？</h3>
         <p class="body">
-          コードを全部書けなくても大丈夫です。<strong>やりたいことを日本語で伝えるだけで、GeminiがGASのコードを生成してくれます。</strong>今日のハンズオンでも、コピーしてそのまま使えるプロンプトを用意しました。
+          GASのコードは <strong>「関数（ファンクション）」</strong> という部品の集まりでできています。
+          それぞれの関数が役割を持って動くことで、ひとつのシステムが完成します。
+          カレー作りに例えるとイメージしやすいです。
         </p>
-
-        <div class="gemini-how fade-up">
-          <div class="gh-label">Gemini への伝え方 — 3ステップ</div>
-          <div class="gh-steps">
-            <div class="gh-step"><span class="gh-num">01</span>
-              <div><strong>状況を説明する</strong><br /><span>「こんなスプレッドシートがある」「こんな画面を作りたい」など、背景を伝える</span></div>
-            </div>
-            <div class="gh-arrow">→</div>
-            <div class="gh-step"><span class="gh-num">02</span>
-              <div><strong>やりたいことを具体的に書く</strong><br /><span>シート名・列名・タイトルなど、自分の業務に合わせた情報を入れる</span></div>
-            </div>
-            <div class="gh-arrow">→</div>
-            <div class="gh-step"><span class="gh-num">03</span>
-              <div><strong>出力形式を指定する</strong><br /><span>「コード全文を出力して」と書くと、そのままコピーして使える形で返してくれる</span></div>
-            </div>
-          </div>
+        <!-- ★ 画像をここに置く
+             ファイル名: gas-function-curry.png（または .jpg）
+             このファイルと同じフォルダ（jissenkai/）に画像を入れてください -->
+        <div class="func-img-wrap fade-up">
+          <img
+            src="gas-function-curry.png"
+            alt="GASの関数をカレー作りに例えた図解"
+            class="func-img"
+            onerror="this.parentElement.innerHTML='<div class=\'func-img-placeholder\'>📷 画像ファイル（gas-function-curry.png）をこのHTMLと同じフォルダに置いてください</div>'"
+          />
         </div>
+        <style>
+          .func-img-wrap{margin:24px 0 32px;text-align:center;}
+          .func-img{max-width:100%;border-radius:var(--r);box-shadow:0 4px 20px rgba(0,0,0,0.10);border:1px solid var(--rule);}
+          .func-img-placeholder{
+            background:var(--cream);border:2px dashed var(--rule);border-radius:var(--r);
+            padding:48px 24px;color:var(--ink-m);font-size:14px;text-align:center;
+          }
+        </style>
 
-        <p
-          style="font-size:13px;font-weight:700;color:var(--purple);letter-spacing:0.1em;text-transform:uppercase;margin:28px 0 12px;">
-          📋 コピーして使えるプロンプト集</p>
-
-        <div class="prompt-wrap fade-up">
-          <div class="prompt-header">
-            <div class="prompt-dots"><span class="pd pd-r"></span><span class="pd pd-y"></span><span
-                class="pd pd-g"></span></div>
-            <span class="prompt-label">① コードを自分用にカスタマイズする</span>
-            <button class="copy-btn" onclick="copyCode(this)">コピー</button>
-          </div>
-          <pre class="prompt-pre">以下のGASコード（Code.gs）とHTMLファイル（index.html）があります。
-
-[Code.gs の内容をここに貼り付け]
-
-[index.html の内容をここに貼り付け]
-
-このコードを以下の内容に変更してください：
-・シート名：[自分のシート名を入力]
-・表示したい列名：[例：日付, 担当者, 満足度, コメント]
-・ダッシュボードのタイトル：[例：顧客アンケートダッシュボード]
-
-変更後の Code.gs と index.html を、そのままコピーして使える形で全文出力してください。</pre>
-        </div>
-
-        <div class="prompt-wrap fade-up">
-          <div class="prompt-header">
-            <div class="prompt-dots"><span class="pd pd-r"></span><span class="pd pd-y"></span><span
-                class="pd pd-g"></span></div>
-            <span class="prompt-label">② 新機能を追加する（メール自動送信）</span>
-            <button class="copy-btn" onclick="copyCode(this)">コピー</button>
-          </div>
-          <pre class="prompt-pre">以下のGASコードに、お礼メールを自動送信する機能を追加してください。
-
-[Code.gs の内容をここに貼り付け]
-
-追加したい内容：
-・スプレッドシートの[列名（例：B列）]にメールアドレスが入っています
-・そのアドレス全員に、以下のメールを送ってください
-・件名：[例：研修へのご参加ありがとうございました]
-・本文：[送りたいメッセージを書いてください]
-
-追加後のコード全文を出力してください。</pre>
-        </div>
-
-        <div class="prompt-wrap fade-up">
-          <div class="prompt-header">
-            <div class="prompt-dots"><span class="pd pd-r"></span><span class="pd pd-y"></span><span
-                class="pd pd-g"></span></div>
-            <span class="prompt-label">③ エラーが出たときに直してもらう</span>
-            <button class="copy-btn" onclick="copyCode(this)">コピー</button>
-          </div>
-          <pre class="prompt-pre">GASのコードを実行したら、以下のエラーが出ました。原因と直し方を教えてください。
-
-エラーメッセージ：
-[エラーメッセージをここに貼り付け]
-
-実行したコード：
-[コードをここに貼り付け]
-
-修正したコードも全文で出力してください。</pre>
+        <h3 class="sub" id="gas-deploy">デプロイとは？</h3>
+        <p class="body">
+          GASのコードを書いたら、<strong>「デプロイ」</strong> することで、そのコードがWebアプリとして公開されます。
+          デプロイとは「作ったものを動く状態にして公開すること」です。
+        </p>
+        <!-- ★ 画像をここに置く
+             ファイル名: gas-deploy-image.png（または .jpg）
+             このファイルと同じフォルダ（jissenkai/）に画像を入れてください -->
+        <div class="func-img-wrap fade-up">
+          <img
+            src="gas-deploy-image.png"
+            alt="デプロイの説明図解"
+            class="func-img"
+            onerror="this.parentElement.innerHTML='<div class=\'func-img-placeholder\'>📷 画像ファイル（gas-deploy-image.png）をこのHTMLと同じフォルダに置いてください</div>'"
+          />
         </div>
 
         <div class="think-framework fade-up">
@@ -2972,6 +2931,30 @@
         </div>
         <p class="body">まず「GASを動かせた」という体験をしましょう。スプレッドシートを開いてGASエディタに入るところから始めます。</p>
 
+        <!-- 保存の注意 共通バナー -->
+        <div class="save-banner fade-up">
+          <span class="save-banner-icon">💾</span>
+          <div>
+            <strong>コードを貼り付けたら必ず保存してから実行してください</strong><br>
+            <span>キーボード <kbd>Ctrl</kbd> + <kbd>S</kbd>（Mac は <kbd>⌘</kbd> + <kbd>S</kbd>）または、エディタ上部のフロッピーディスクアイコン <span style="font-size:16px;">💾</span> をクリック</span>
+          </div>
+        </div>
+        <style>
+          .save-banner{
+            display:flex;align-items:flex-start;gap:16px;
+            background:#fff8e6;border:1.5px solid #f0a500;border-radius:var(--r);
+            padding:18px 20px;margin:20px 0 28px;font-size:14px;line-height:1.7;
+            color:var(--ink);
+          }
+          .save-banner-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
+          .save-banner kbd{
+            display:inline-block;
+            background:#fff;border:1px solid #ccc;border-bottom:2px solid #bbb;
+            border-radius:5px;padding:1px 7px;font-size:12px;font-family:'JetBrains Mono',monospace;
+            color:#444;line-height:1.6;
+          }
+        </style>
+
         <!-- Step 1 -->
         <div class="step-block fade-up" id="p1s1">
           <div class="step-header">
@@ -2981,13 +2964,40 @@
           <div class="step-body">
             <div class="step-why"><span
                 class="sw-icon">🎯</span><span>GASのコードを書く場所を確認します。スプレッドシートに紐づいたスクリプトとして動くのが、GASの特徴です。</span></div>
-            <p class="step-desc">スプレッドシートのメニューからGASエディタを起動します。</p>
+
+            <p class="step-desc" style="margin-bottom:14px;">まず <strong>スプレッドシートを新規作成</strong> します。</p>
+
+            <div class="two-open-ways">
+              <div class="open-way">
+                <div class="open-way-label">方法①（最速）</div>
+                <p style="font-size:14px;margin:8px 0 10px;color:var(--ink-s);">ブラウザのアドレスバーに入力して Enter</p>
+                <div class="code-wrap" style="margin:0;">
+                  <div class="code-header">
+                    <div class="traffic-lights"><div class="tl tl-red"></div><div class="tl tl-yellow"></div><div class="tl tl-green"></div></div>
+                    <span class="code-lang">ブラウザアドレスバー</span>
+                    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                  </div>
+                  <pre><code><span class="c-str">sheet.new</span></code></pre>
+                </div>
+              </div>
+              <div class="open-way-sep">または</div>
+              <div class="open-way">
+                <div class="open-way-label">方法②</div>
+                <div class="arrow-step" style="margin:8px 0 0;">
+                  <span class="as">右上の <strong>Googleアプリ</strong>（9点グリッド）</span>
+                  <span class="ar">→</span>
+                  <span class="as"><strong>スプレッドシート</strong></span>
+                  <span class="ar">→</span>
+                  <span class="as"><strong>新しいスプレッドシートを作成</strong>（＋）</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="step-desc" style="margin:22px 0 12px;">スプレッドシートが開いたら、メニューから <strong>GASエディタ</strong> を起動します。</p>
             <div class="arrow-step">
-              <span class="as">スプレッドシートを開く</span>
+              <span class="as"><strong>拡張機能</strong></span>
               <span class="ar">→</span>
-              <span class="as">拡張機能</span>
-              <span class="ar">→</span>
-              <span class="as">Apps Script</span>
+              <span class="as"><strong>Apps Script</strong></span>
               <span class="ar">→</span>
               <span class="as">エディタが開いたら完了 ✓</span>
             </div>
@@ -2995,6 +3005,12 @@
               <div class="ni-wrap">💡</div>
               <span>エディタが開かない場合は、ブラウザのポップアップブロックを確認してください。アドレスバー右側の「ポップアップがブロックされました」を許可すると開きます。</span>
             </div>
+            <style>
+              .two-open-ways{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin:0 0 4px;}
+              .two-open-ways .open-way{flex:1;min-width:240px;background:var(--cream);border:1px solid var(--rule);border-radius:var(--r-sm);padding:16px;}
+              .open-way-label{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--brand);text-transform:uppercase;}
+              .open-way-sep{align-self:center;font-size:13px;font-weight:700;color:var(--ink-m);flex-shrink:0;padding-top:28px;}
+            </style>
           </div>
         </div>
 
@@ -3040,9 +3056,43 @@
           </div>
           <div class="step-body">
             <div class="step-why"><span
-                class="sw-icon">🎯</span><span>ダッシュボードの核心は「スプレッドシートのデータを読み込む」こと。<strong>SpreadsheetApp</strong>
-                がその入口です。</span></div>
-            <p class="step-desc">GASからスプレッドシートのデータを取得してみましょう。<span class="ic">SpreadsheetApp</span> を使います。</p>
+                class="sw-icon">🎯</span><span>ダッシュボードの核心は「スプレッドシートのデータをGASで読み込む」こと。<strong>自分で入力したデータ</strong>がGASのログに表示されると、繋がりが実感できます。</span></div>
+
+            <p class="step-desc">スプレッドシートに自分のデータを入力して、GASで読み込んでみましょう。</p>
+
+            <!-- STEP A: シート名変更 -->
+            <p style="font-size:14px;font-weight:700;color:var(--ink);margin:20px 0 10px;">① スプレッドシートのシート名を変更する</p>
+            <div class="arrow-step">
+              <span class="as">画面下のタブ <strong>「シート1」</strong> をダブルクリック</span>
+              <span class="ar">→</span>
+              <span class="as"><strong>「好きなものリスト」</strong> と入力してEnter</span>
+            </div>
+
+            <!-- STEP B: データ入力 -->
+            <p style="font-size:14px;font-weight:700;color:var(--ink);margin:20px 0 10px;">② 好きなものを何行か入力する</p>
+            <div class="fav-example">
+              <div class="fav-ex-header">
+                <div class="fav-col-head">A列：カテゴリ</div>
+                <div class="fav-col-head">B列：好きなもの</div>
+              </div>
+              <div class="fav-row"><span class="fav-cell">食べ物</span><span class="fav-cell">ラーメン</span></div>
+              <div class="fav-row"><span class="fav-cell">場所</span><span class="fav-cell">京都</span></div>
+              <div class="fav-row"><span class="fav-cell">趣味</span><span class="fav-cell">読書</span></div>
+              <div class="fav-row fav-row--hint"><span class="fav-cell" style="color:var(--ink-m);">…自由に追加</span><span class="fav-cell" style="color:var(--ink-m);"></span></div>
+            </div>
+            <style>
+              .fav-example{background:var(--cream);border:1px solid var(--rule);border-radius:var(--r-sm);overflow:hidden;margin-bottom:18px;}
+              .fav-ex-header{display:grid;grid-template-columns:1fr 1fr;background:var(--brand);gap:1px;}
+              .fav-col-head{background:var(--brand);color:#fff;font-size:12px;font-weight:700;padding:8px 14px;letter-spacing:.04em;}
+              .fav-row{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--rule);}
+              .fav-row:last-child{border-bottom:none;}
+              .fav-row--hint{background:rgba(0,0,0,0.02);}
+              .fav-cell{padding:10px 14px;font-size:14px;color:var(--ink);}
+              .fav-cell+.fav-cell{border-left:1px solid var(--rule);}
+            </style>
+
+            <!-- STEP C: コード -->
+            <p style="font-size:14px;font-weight:700;color:var(--ink);margin:20px 0 10px;">③ GASでデータを読み込む</p>
             <div class="code-wrap">
               <div class="code-header">
                 <div class="traffic-lights">
@@ -3055,16 +3105,25 @@
               </div>
               <pre><code><span class="c-kw">function</span> <span class="c-fn">getData</span><span class="c-w">() {</span>
   <span class="c-kw">const</span> <span class="c-var">sheet</span> <span class="c-w">=</span> <span class="c-fn">SpreadsheetApp</span><span class="c-w">.</span><span class="c-fn">getActiveSpreadsheet</span><span class="c-w">()</span>
-                               <span class="c-w">.</span><span class="c-fn">getSheetByName</span><span class="c-w">(</span><span class="c-str">"満足度調査"</span><span class="c-w">);</span>
+                               <span class="c-w">.</span><span class="c-fn">getSheetByName</span><span class="c-w">(</span><span class="c-str">"好きなものリスト"</span><span class="c-w">);</span>
   <span class="c-kw">const</span> <span class="c-var">data</span>  <span class="c-w">=</span> <span class="c-var">sheet</span><span class="c-w">.</span><span class="c-fn">getDataRange</span><span class="c-w">().</span><span class="c-fn">getValues</span><span class="c-w">();</span>
   <span class="c-fn">Logger</span><span class="c-w">.</span><span class="c-fn">log</span><span class="c-w">(</span><span class="c-var">data</span><span class="c-w">);</span>
 <span class="c-w">}</span></code></pre>
             </div>
             <ol class="proc">
-              <li><span class="pnum">1</span>コードをコピーして貼り付ける</li>
-              <li><span class="pnum">2</span>関数を <strong>「getData」</strong> に切り替えて実行</li>
-              <li><span class="pnum">3</span>実行ログにシートのデータが表示されたら成功</li>
+              <li><span class="pnum">1</span>コードをコピーして貼り付け、<kbd>Ctrl</kbd>+<kbd>S</kbd> で保存</li>
+              <li><span class="pnum">2</span>関数を <strong>「getData」</strong> に切り替えて <strong>▶ 実行</strong></li>
+              <li><span class="pnum">3</span>実行ログに <strong>自分が入力したデータ</strong> が表示されたら成功！🎉</li>
             </ol>
+
+            <div class="notice" style="border-color:var(--brand);background:var(--brand-9);margin-top:16px;">
+              <div class="ni-wrap">✅</div>
+              <div>
+                <strong>こんな形で表示されたらOKです</strong><br>
+                <span class="ic" style="font-size:13px;">[["食べ物", "ラーメン"], ["場所", "京都"], ["趣味", "読書"]]</span><br>
+                <span style="font-size:13px;color:var(--ink-s);">スプレッドシートの各行が配列として読み込まれています。これがダッシュボードの元データになります。</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -3359,8 +3418,8 @@
             <p class="step-desc">Step 5で書き出した内容をもとに、変更マップの3箇所を自分の業務に合わせて書き換えましょう。</p>
             <div class="notice" style="margin-bottom:16px;">
               <div class="ni-wrap" style="background:var(--purple-gradient);">✨</div>
-              <span>3箇所以外も変えたい場合は、<strong>Geminiに任せましょう。</strong>コードをまるごとコピーしてプロンプトに貼るだけです。 → <a href="#gas-gemini"
-                  style="color:var(--purple);font-weight:700;text-decoration:underline;">プロンプト集を見る ↑</a></span>
+              <span>3箇所以外も変えたい場合は、<strong>Geminiに任せましょう。</strong>コードをまるごとコピーしてプロンプトに貼るだけです。 → <a href="#gemini-prompts"
+                  style="color:var(--purple);font-weight:700;text-decoration:underline;">プロンプト集を開く ↓</a></span>
             </div>
             <div class="change-map">
               <div class="cm-label">変更するのはこの3箇所だけ</div>
@@ -3382,6 +3441,142 @@
               <span class="ar">→</span>
               <span class="as">デプロイ</span>
             </div>
+            <!-- Gemini プロンプト集（折りたたみ） -->
+            <details class="prompt-accordion" id="gemini-prompts">
+              <summary class="prompt-accordion-summary">
+                <span class="pa-icon">✨</span>
+                <span class="pa-title">Geminiプロンプト集を開く</span>
+                <span class="pa-badge">3つ</span>
+                <span class="pa-arrow">▼</span>
+              </summary>
+              <div class="pa-body">
+                <p style="font-size:13px;color:var(--ink-s);margin-bottom:20px;line-height:1.7;">
+                  コードをまるごとコピーして、Geminiに貼り付けるだけ。<br/>
+                  <strong>やりたいことを日本語で伝えればGeminiが書いてくれます。</strong>
+                </p>
+
+                <div class="gemini-how" style="margin-bottom:24px;">
+                  <div class="gh-label">Gemini への伝え方 — 3ステップ</div>
+                  <div class="gh-steps">
+                    <div class="gh-step"><span class="gh-num">01</span>
+                      <div><strong>状況を説明する</strong><br /><span>スプレッドシートの構成・やりたいことの背景を伝える</span></div>
+                    </div>
+                    <div class="gh-arrow">→</div>
+                    <div class="gh-step"><span class="gh-num">02</span>
+                      <div><strong>具体的に書く</strong><br /><span>シート名・列名・タイトルなど詳細を入れる</span></div>
+                    </div>
+                    <div class="gh-arrow">→</div>
+                    <div class="gh-step"><span class="gh-num">03</span>
+                      <div><strong>出力形式を指定する</strong><br /><span>「コード全文を出力して」で即使える形で返ってくる</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                <p style="font-size:13px;font-weight:700;color:var(--purple);letter-spacing:0.1em;text-transform:uppercase;margin:0 0 12px;">
+                  📋 コピーして使えるプロンプト集</p>
+
+                <div class="prompt-wrap">
+                  <div class="prompt-header">
+                    <div class="prompt-dots"><span class="pd pd-r"></span><span class="pd pd-y"></span><span class="pd pd-g"></span></div>
+                    <span class="prompt-label">① コードを自分用にカスタマイズする</span>
+                    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                  </div>
+                  <pre class="prompt-pre">以下のGASコード（Code.gs）とHTMLファイル（index.html）があります。
+
+[Code.gs の内容をここに貼り付け]
+
+[index.html の内容をここに貼り付け]
+
+このコードを以下の内容に変更してください：
+・シート名：[自分のシート名を入力]
+・表示したい列名：[例：日付, 担当者, 満足度, コメント]
+・ダッシュボードのタイトル：[例：顧客アンケートダッシュボード]
+
+変更後の Code.gs と index.html を、そのままコピーして使える形で全文出力してください。</pre>
+                </div>
+
+                <div class="prompt-wrap">
+                  <div class="prompt-header">
+                    <div class="prompt-dots"><span class="pd pd-r"></span><span class="pd pd-y"></span><span class="pd pd-g"></span></div>
+                    <span class="prompt-label">② 新機能を追加する（メール自動送信）</span>
+                    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                  </div>
+                  <pre class="prompt-pre">以下のGASコードに、お礼メールを自動送信する機能を追加してください。
+
+[Code.gs の内容をここに貼り付け]
+
+追加したい内容：
+・スプレッドシートの[列名（例：B列）]にメールアドレスが入っています
+・そのアドレス全員に、以下のメールを送ってください
+・件名：[例：研修へのご参加ありがとうございました]
+・本文：[送りたいメッセージを書いてください]
+
+追加後のコード全文を出力してください。</pre>
+                </div>
+
+                <div class="prompt-wrap">
+                  <div class="prompt-header">
+                    <div class="prompt-dots"><span class="pd pd-r"></span><span class="pd pd-y"></span><span class="pd pd-g"></span></div>
+                    <span class="prompt-label">③ エラーが出たときに直してもらう</span>
+                    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+                  </div>
+                  <pre class="prompt-pre">GASのコードを実行したら、以下のエラーが出ました。原因と直し方を教えてください。
+
+エラーメッセージ：
+[エラーメッセージをここに貼り付け]
+
+実行したコード：
+[コードをここに貼り付け]
+
+修正したコードも全文で出力してください。</pre>
+                </div>
+              </div>
+            </details>
+
+            <style>
+              .prompt-accordion {
+                border: 1.5px solid rgba(139,92,246,0.35);
+                border-radius: var(--r);
+                margin-top: 20px;
+                overflow: hidden;
+                background: var(--purple-9, #f8f4ff);
+              }
+              .prompt-accordion[open] .pa-arrow { transform: rotate(180deg); }
+              .prompt-accordion-summary {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 16px 20px;
+                cursor: pointer;
+                list-style: none;
+                user-select: none;
+                font-weight: 700;
+                font-size: 15px;
+                color: var(--purple, #7c3aed);
+                background: rgba(139,92,246,0.06);
+                transition: background .15s;
+              }
+              .prompt-accordion-summary::-webkit-details-marker { display: none; }
+              .prompt-accordion-summary:hover { background: rgba(139,92,246,0.1); }
+              .pa-icon { font-size: 18px; }
+              .pa-title { flex: 1; }
+              .pa-badge {
+                font-size: 11px; font-weight: 700;
+                background: rgba(139,92,246,0.15);
+                color: var(--purple, #7c3aed);
+                padding: 2px 8px; border-radius: 999px;
+              }
+              .pa-arrow {
+                font-size: 12px;
+                color: var(--purple, #7c3aed);
+                transition: transform .25s ease;
+                display: inline-block;
+              }
+              .pa-body {
+                padding: 20px 20px 24px;
+                border-top: 1px solid rgba(139,92,246,0.15);
+              }
+            </style>
           </div>
         </div>
 
@@ -3411,6 +3606,79 @@
           </div>
         </div>
       </section>
+
+      <section class="submit-section" id="submit">
+        <span class="submit-eyebrow">Submit & Share</span>
+        <h2 class="submit-title">完成したダッシュボードを提出する</h2>
+        <p class="submit-sub">
+          WebアプリURL をペーストするだけで、みんなのギャラリーに表示されます。<br>
+          ニックネームとコメントは任意。提出後にもう一度提出すれば上書きされます。
+        </p>
+
+        <!-- 提出フォーム -->
+        <form class="submit-form" id="submitForm" onsubmit="return submitWork(event)">
+          <div class="submit-row">
+            <label class="submit-label" for="subNickname">
+              ニックネーム <span class="opt">任意</span>
+            </label>
+            <input class="submit-input" type="text" id="subNickname" placeholder="例：田中・匿名希望・チーム名など (空欄なら 匿名さん)"
+              maxlength="30">
+          </div>
+          <div class="submit-row">
+            <label class="submit-label" for="subUrl">
+              WebアプリURL <span class="req">必須</span>
+            </label>
+            <input class="submit-input" type="url" id="subUrl"
+              placeholder="https://script.google.com/macros/s/XXXXX/exec" required>
+          </div>
+          <div class="submit-row">
+            <label class="submit-label" for="subComment">
+              コメント <span class="opt">任意</span>
+            </label>
+            <textarea class="submit-textarea" id="subComment" placeholder="工夫したところ・つまずいたところ・感想など"
+              maxlength="200"></textarea>
+          </div>
+          <div class="submit-actions">
+            <span class="submit-status" id="submitStatus"></span>
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M22 2L11 13" />
+                <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+              </svg>
+              提出する
+            </button>
+          </div>
+        </form>
+
+        <!-- ギャラリー -->
+        <div class="gallery-header">
+          <div class="gallery-heading">
+            <svg width="18" height="18" fill="none" stroke="#ff7eb6" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            みんなの作品ギャラリー
+            <span class="gallery-count" id="galleryCount">0</span>
+          </div>
+          <button type="button" class="gallery-refresh" id="refreshBtn" onclick="loadGallery(true)">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
+            更新
+          </button>
+        </div>
+        <div class="gallery-grid" id="galleryGrid">
+          <div class="gallery-empty">
+            <span class="emoji">🎨</span>
+            まだ提出がありません。最初の1人になりましょう！
+          </div>
+        </div>
+      </section>
+
 
       <!-- Section 4: 発展 -->
       <section class="section" id="advanced">
@@ -3510,78 +3778,6 @@
       </section>
 
       <!-- 作品提出 & ギャラリー -->
-      <section class="submit-section" id="submit">
-        <span class="submit-eyebrow">Submit & Share</span>
-        <h2 class="submit-title">完成したダッシュボードを提出する</h2>
-        <p class="submit-sub">
-          WebアプリURL をペーストするだけで、みんなのギャラリーに表示されます。<br>
-          ニックネームとコメントは任意。提出後にもう一度提出すれば上書きされます。
-        </p>
-
-        <!-- 提出フォーム -->
-        <form class="submit-form" id="submitForm" onsubmit="return submitWork(event)">
-          <div class="submit-row">
-            <label class="submit-label" for="subNickname">
-              ニックネーム <span class="opt">任意</span>
-            </label>
-            <input class="submit-input" type="text" id="subNickname" placeholder="例：田中・匿名希望・チーム名など (空欄なら 匿名さん)"
-              maxlength="30">
-          </div>
-          <div class="submit-row">
-            <label class="submit-label" for="subUrl">
-              WebアプリURL <span class="req">必須</span>
-            </label>
-            <input class="submit-input" type="url" id="subUrl"
-              placeholder="https://script.google.com/macros/s/XXXXX/exec" required>
-          </div>
-          <div class="submit-row">
-            <label class="submit-label" for="subComment">
-              コメント <span class="opt">任意</span>
-            </label>
-            <textarea class="submit-textarea" id="subComment" placeholder="工夫したところ・つまずいたところ・感想など"
-              maxlength="200"></textarea>
-          </div>
-          <div class="submit-actions">
-            <span class="submit-status" id="submitStatus"></span>
-            <button type="submit" class="submit-btn" id="submitBtn">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path d="M22 2L11 13" />
-                <path d="M22 2L15 22L11 13L2 9L22 2Z" />
-              </svg>
-              提出する
-            </button>
-          </div>
-        </form>
-
-        <!-- ギャラリー -->
-        <div class="gallery-header">
-          <div class="gallery-heading">
-            <svg width="18" height="18" fill="none" stroke="#ff7eb6" stroke-width="2" viewBox="0 0 24 24">
-              <rect x="3" y="3" width="7" height="7" />
-              <rect x="14" y="3" width="7" height="7" />
-              <rect x="14" y="14" width="7" height="7" />
-              <rect x="3" y="14" width="7" height="7" />
-            </svg>
-            みんなの作品ギャラリー
-            <span class="gallery-count" id="galleryCount">0</span>
-          </div>
-          <button type="button" class="gallery-refresh" id="refreshBtn" onclick="loadGallery(true)">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <polyline points="23 4 23 10 17 10" />
-              <polyline points="1 20 1 14 7 14" />
-              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
-            </svg>
-            更新
-          </button>
-        </div>
-        <div class="gallery-grid" id="galleryGrid">
-          <div class="gallery-empty">
-            <span class="emoji">🎨</span>
-            まだ提出がありません。最初の1人になりましょう！
-          </div>
-        </div>
-      </section>
-
       <!-- Footer -->
       <footer class="site-footer">
         <div class="footer-ghost">GAS</div>
