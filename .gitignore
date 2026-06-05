@@ -1,6 +1,2 @@
-# lecture_site.html 以外はすべて除外
-*
-
-# lecture_site.html だけ許可
-!lecture_site.html
-!.gitignore
+# site/ フォルダ内のファイルをすべてpush対象にする
+# （特定ファイルを除外したい場合はここに追加）
