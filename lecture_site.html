@@ -2453,7 +2453,12 @@
       background: var(--teal-9);
       border-color: var(--teal);
       color: var(--teal);
-      pointer-events: none;
+    }
+
+    .complete-btn.done:hover {
+      border-color: #d97706;
+      color: #d97706;
+      background: rgba(217, 119, 6, 0.08);
     }
 
     .complete-btn.done .cb-icon {
@@ -4321,17 +4326,15 @@
 
     // ── Step indicator: 完了ボタン連動（スクロール検知は使わない） ──
     // 各 p2sX の完了ボタンが押されたときに updateStepIndicator() を呼ぶ
-    function updateStepIndicator(completedStepNum) {
+    function updateStepIndicator() {
       for (let i = 1; i <= 7; i++) {
         const dot = document.getElementById('si' + i);
         const item = dot ? dot.closest('.si-item') : null;
         if (!dot) continue;
         dot.classList.remove('active-pulse');
-        if (i <= completedStepNum) {
-          dot.classList.add('done');
-          if (item) item.classList.add('done');
-        }
-        // それより先のドットは現状維持（後退しない）
+        const isDone = completedStepIds.has('p2s' + i);
+        dot.classList.toggle('done', isDone);
+        if (item) item.classList.toggle('done', isDone);
       }
     }
 
@@ -4375,7 +4378,7 @@
       updateCompletionGate();
     }
 
-    function trackStep(stepId) {
+    function trackStep(stepId, action = 'complete') {
       if (!GAS_TRACKER_URL) return;
       try {
         fetch(GAS_TRACKER_URL, {
@@ -4385,6 +4388,7 @@
           body: JSON.stringify({
             sessionId: SESSION_ID,
             step: stepId,
+            action: action,
             timestamp: new Date().toISOString()
           })
         });
@@ -4720,13 +4724,25 @@
         btn.innerHTML = `<span class="cb-icon">○</span> このステップを完了する`;
         if (completedStepIds.has(block.id)) {
           btn.classList.add('done');
-          btn.innerHTML = `<span class="cb-icon">✓</span> 完了！`;
+          btn.innerHTML = `<span class="cb-icon">✓</span> 完了済み（クリックで解除）`;
           block.classList.add('completed');
         }
         btn.addEventListener('click', () => {
-          if (btn.classList.contains('done')) return;
+          if (btn.classList.contains('done')) {
+            btn.classList.remove('done');
+            btn.innerHTML = `<span class="cb-icon">○</span> このステップを完了する`;
+            block.classList.remove('completed');
+            completedStepIds.delete(block.id);
+            completedSteps = completedStepIds.size;
+            localStorage.setItem(COMPLETED_STEPS_KEY, JSON.stringify([...completedStepIds]));
+            updateProgress();
+            updateStepIndicator();
+            trackStep(block.id, 'uncomplete');
+            showToast('完了を解除しました', 'もう一度完了ボタンを押せます');
+            return;
+          }
           btn.classList.add('done');
-          btn.innerHTML = `<span class="cb-icon">✓</span> 完了！`;
+          btn.innerHTML = `<span class="cb-icon">✓</span> 完了済み（クリックで解除）`;
           block.classList.add('completed');
           completedStepIds.add(block.id);
           completedSteps = completedStepIds.size;
@@ -4738,8 +4754,7 @@
           showToast(msg[0], msg[1]);
 
           // Part 2 のステップならインジケーターを更新
-          const p2Match = block.id.match(/^p2s(\d+)$/);
-          if (p2Match) updateStepIndicator(parseInt(p2Match[1]));
+          updateStepIndicator();
 
           // 大きな節目で紙吹雪
           if (completedSteps === 4 || completedSteps === TOTAL_STEPS) {
@@ -4750,6 +4765,7 @@
       }
     });
 
+    updateStepIndicator();
     updateProgress();
 
   </script>
