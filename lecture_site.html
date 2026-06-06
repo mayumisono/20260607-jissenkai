@@ -4556,10 +4556,28 @@
     }
     function escAttr(s) { return escHtml(s); }
 
-    // 初回ロード & 自動更新（30秒ごと）
+    // 初回ロード & 自動更新（表示中のみ60秒ごと）
+    let galleryRefreshTimer = null;
+
+    function startGalleryAutoRefresh() {
+      clearInterval(galleryRefreshTimer);
+      if (document.hidden) return;
+      galleryRefreshTimer = setInterval(() => loadGallery(false), 60_000);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       loadGallery(false);
-      setInterval(() => loadGallery(false), 30_000);
+      startGalleryAutoRefresh();
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        clearInterval(galleryRefreshTimer);
+        galleryRefreshTimer = null;
+        return;
+      }
+      loadGallery(false);
+      startGalleryAutoRefresh();
     });
 
     // ── Gamification ──
