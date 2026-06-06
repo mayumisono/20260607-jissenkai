@@ -3854,8 +3854,8 @@
       </section>
 
       <div class="completion-gate" id="completion-gate">
-        <strong>発展コンテンツは、全11ステップ完了後に開きます</strong>
-        <p id="completion-gate-message">完了ボタンを押して進めてください。残り 11 ステップです。</p>
+        <strong>発展コンテンツは、作品提出後に開きます</strong>
+        <p id="completion-gate-message">上のフォームから作品を提出してください。</p>
       </div>
 
       <!-- Section 4: 発展 -->
@@ -4365,6 +4365,15 @@
       return id;
     }
     const SESSION_ID = getSessionId();
+    const SUBMITTED_KEY = 'gas_workshop_submitted_2026';
+    let hasSubmitted = localStorage.getItem(SUBMITTED_KEY) === 'yes';
+
+    function markSubmissionComplete() {
+      if (hasSubmitted) return;
+      hasSubmitted = true;
+      localStorage.setItem(SUBMITTED_KEY, 'yes');
+      updateCompletionGate();
+    }
 
     function trackStep(stepId) {
       if (!GAS_TRACKER_URL) return;
@@ -4437,6 +4446,7 @@
           statusEl.textContent = '✓ 提出しました！ギャラリーに反映されるまで数秒お待ちください。';
           statusEl.className = 'submit-status success';
           btn.disabled = false;
+          markSubmissionComplete();
           // 2秒後にギャラリー再読み込み
           setTimeout(() => loadGallery(true), 1500);
         }, 400);
@@ -4491,6 +4501,9 @@
       const countEl = document.getElementById('galleryCount');
       if (!grid) return;
 
+      if (submissions.some(s => s.sessionId === SESSION_ID)) {
+        markSubmissionComplete();
+      }
       countEl.textContent = submissions.length;
 
       if (submissions.length === 0) {
@@ -4588,19 +4601,14 @@
     }
 
     function updateCompletionGate() {
-      const unlocked = completedSteps >= TOTAL_STEPS;
+      const unlocked = hasSubmitted;
       const gate = document.getElementById('completion-gate');
-      const message = document.getElementById('completion-gate-message');
       const lockedLinks = document.querySelectorAll('[data-requires-completion]');
 
       document.querySelectorAll('.locked-content').forEach(el => {
         el.style.display = unlocked ? '' : 'none';
       });
       if (gate) gate.style.display = unlocked ? 'none' : '';
-      if (message && !unlocked) {
-        message.textContent = '完了ボタンを押して進めてください。残り '
-          + Math.max(0, TOTAL_STEPS - completedSteps) + ' ステップです。';
-      }
       lockedLinks.forEach(link => {
         link.classList.toggle('is-locked', !unlocked);
         link.setAttribute('aria-disabled', unlocked ? 'false' : 'true');
@@ -4609,14 +4617,14 @@
 
     document.querySelectorAll('[data-requires-completion]').forEach(link => {
       link.addEventListener('click', (event) => {
-        if (completedSteps >= TOTAL_STEPS) return;
+        if (hasSubmitted) return;
         event.preventDefault();
         document.getElementById('completion-gate').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        showToast('まだロック中です', '先に全11ステップの完了ボタンを押してください');
+        showToast('まだロック中です', '先に作品を提出してください');
       });
     });
 
-    if (completedSteps < TOTAL_STEPS && ['#advanced', '#adv-mail', '#adv-calendar', '#adv-clasp'].includes(location.hash)) {
+    if (!hasSubmitted && ['#advanced', '#adv-mail', '#adv-calendar', '#adv-clasp'].includes(location.hash)) {
       history.replaceState(null, '', location.pathname + location.search);
     }
 
