@@ -3353,7 +3353,7 @@
           <h2 class="section-title">Part 2　メインハンズオン</h2>
           <span class="section-time">55 min</span>
         </div>
-        <p class="body">テンプレートを使って、アンケートダッシュボードを完成させましょう。コードは3箇所書き換えるだけで、自分の業務に転用できます。</p>
+        <p class="body">テンプレートを使って、アンケートダッシュボードを完成させましょう。コードは2箇所書き換えるだけで、自分の業務に転用できます。</p>
 
         <div class="step-indicator fade-up">
           <div class="si-item">
@@ -3420,15 +3420,14 @@
           </div>
           <div class="step-body">
             <div class="step-why"><span
-                class="sw-icon">🎯</span><span>変えるのは<strong>3箇所だけ</strong>。コードを全部理解しなくても大丈夫。「どこを変えれば何が変わるか」がわかれば、自分の業務に転用できます。</span>
+                class="sw-icon">🎯</span><span>変えるのは<strong>2箇所だけ</strong>。コードを全部理解しなくても大丈夫。「どこを変えれば何が変わるか」がわかれば、自分の業務に転用できます。</span>
             </div>
-            <p class="step-desc">コードは<strong>3箇所だけ</strong>変えれば自分の業務に転用できます。まずは全体を眺めてみましょう。</p>
+            <p class="step-desc">コードは<strong>2箇所だけ</strong>変えれば自分の業務に転用できます。まずは全体を眺めてみましょう。</p>
             <div class="change-map">
-              <div class="cm-label">変更マップ（今日変える3箇所）</div>
+              <div class="cm-label">変更マップ（今日変える2箇所）</div>
               <div class="cm-list">
                 <div class="cm-item"><span class="cm-badge">①</span>シート名（Code.gs の SHEET_NAME）</div>
                 <div class="cm-item"><span class="cm-badge">②</span>表示する列（Code.gs の COLUMNS）</div>
-                <div class="cm-item"><span class="cm-badge">③</span>ページタイトル（index.html の &lt;title&gt;）</div>
               </div>
             </div>
             <div class="code-wrap">
@@ -3446,19 +3445,6 @@
 
 <span class="c-comment">// ② 表示したい列を自分のデータに合わせて変える</span>
 <span class="c-hl"><span class="c-kw">const</span> <span class="c-var">COLUMNS</span> <span class="c-w">= [</span><span class="c-str">"日付"</span><span class="c-w">,</span> <span class="c-str">"回答者"</span><span class="c-w">,</span> <span class="c-str">"満足度"</span><span class="c-w">,</span> <span class="c-str">"コメント"</span><span class="c-w">];</span></span></code></pre>
-            </div>
-            <div class="code-wrap">
-              <div class="code-header">
-                <div class="traffic-lights">
-                  <div class="tl tl-red"></div>
-                  <div class="tl tl-yellow"></div>
-                  <div class="tl tl-green"></div>
-                </div>
-                <span class="code-lang">HTML (index.html) — 変更マップ</span>
-                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
-              </div>
-              <pre><code><span class="c-comment">&lt;!-- ③ ページタイトルを変える --&gt;</span>
-<span class="c-hl"><span class="c-w">&lt;title&gt;</span><span class="c-str">アンケートダッシュボード</span><span class="c-w">&lt;/title&gt;</span></span></code></pre>
             </div>
           </div>
         </div>
@@ -3554,25 +3540,29 @@
         <div class="step-block purple-accent fade-up" id="p2s6">
           <div class="step-header">
             <div class="step-num purple">6</div>
-            <div class="step-title">変更マップ3箇所を書き換えてカスタマイズ</div>
+            <div class="step-title">変更マップ2箇所を書き換えてカスタマイズ</div>
             <span class="step-time">15 min</span>
           </div>
           <div class="step-body">
             <div class="step-why"><span class="sw-icon">🎯</span><span>Step
-                2で確認した3箇所を書き換えるだけ。これができれば、どんな業務のデータにも同じ仕組みが使えます。</span></div>
-            <p class="step-desc">Step 5で書き出した内容をもとに、変更マップの3箇所を自分の業務に合わせて書き換えましょう。</p>
+                2で確認した2箇所を書き換えるだけ。これができれば、どんな業務のデータにも同じ仕組みが使えます。</span></div>
+            <p class="step-desc">Step 5で書き出した内容をもとに、変更マップの2箇所を自分の業務に合わせて書き換えましょう。</p>
             <div class="notice" style="margin-bottom:16px;">
               <div class="ni-wrap" style="background:var(--purple-gradient);">✨</div>
-              <span>3箇所以外も変えたい場合は、<strong>Geminiに任せましょう。</strong>コードをまるごとコピーしてプロンプトに貼るだけです。 → <a href="#gemini-prompts"
+              <span>2箇所以外も変えたい場合は、<strong>Geminiに任せましょう。</strong>コードをまるごとコピーしてプロンプトに貼るだけです。 → <a href="#gemini-prompts"
                   style="color:var(--purple);font-weight:700;text-decoration:underline;">プロンプト集を開く ↓</a></span>
             </div>
             <div class="change-map">
-              <div class="cm-label">変更するのはこの3箇所だけ</div>
+              <div class="cm-label">変更するのはこの2箇所だけ</div>
               <div class="cm-list">
                 <div class="cm-item"><span class="cm-badge">①</span>SHEET_NAME を自分のシート名に変える</div>
                 <div class="cm-item"><span class="cm-badge">②</span>COLUMNS を自分の列名に変える</div>
-                <div class="cm-item"><span class="cm-badge">③</span>&lt;title&gt; を自分のダッシュボード名に変える</div>
               </div>
+            </div>
+            <div class="notice" style="margin-top:18px;">
+              <div class="ni-wrap">💡</div>
+              <span><strong>再デプロイが必要なのは、Code.gs や index.html を変更したときです。</strong><br>
+                スプレッドシートのセル編集・行追加だけなら再デプロイは不要です。既存のデプロイを「新バージョン」に更新すれば、WebアプリのURLは変わりません。</span>
             </div>
             <p style="font-size:14px;font-weight:700;color:var(--ink);margin:22px 0 10px;">書き換えたら再デプロイする</p>
             <div class="arrow-step">
@@ -3591,7 +3581,7 @@
               <summary class="prompt-accordion-summary">
                 <span class="pa-icon">✨</span>
                 <span class="pa-title">Geminiプロンプト集を開く</span>
-                <span class="pa-badge">3つ</span>
+                <span class="pa-badge">2つ</span>
                 <span class="pa-arrow">▼</span>
               </summary>
               <div class="pa-body">
@@ -3637,36 +3627,14 @@
 このコードを以下の内容に変更してください：
 ・シート名：[自分のシート名を入力]
 ・表示したい列名：[例：日付, 担当者, 満足度, コメント]
-・ダッシュボードのタイトル：[例：顧客アンケートダッシュボード]
-
-変更後の Code.gs と index.html を、そのままコピーして使える形で全文出力してください。</pre>
+変更後の Code.gs を、そのままコピーして使える形で全文出力してください。</pre>
                 </div>
 
                 <div class="prompt-wrap">
                   <div class="prompt-header">
                     <div class="prompt-dots"><span class="pd pd-r"></span><span class="pd pd-y"></span><span
                         class="pd pd-g"></span></div>
-                    <span class="prompt-label">② 新機能を追加する（メール自動送信）</span>
-                    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
-                  </div>
-                  <pre class="prompt-pre">以下のGASコードに、お礼メールを自動送信する機能を追加してください。
-
-[Code.gs の内容をここに貼り付け]
-
-追加したい内容：
-・スプレッドシートの[列名（例：B列）]にメールアドレスが入っています
-・そのアドレス全員に、以下のメールを送ってください
-・件名：[例：研修へのご参加ありがとうございました]
-・本文：[送りたいメッセージを書いてください]
-
-追加後のコード全文を出力してください。</pre>
-                </div>
-
-                <div class="prompt-wrap">
-                  <div class="prompt-header">
-                    <div class="prompt-dots"><span class="pd pd-r"></span><span class="pd pd-y"></span><span
-                        class="pd pd-g"></span></div>
-                    <span class="prompt-label">③ エラーが出たときに直してもらう</span>
+                    <span class="prompt-label">② エラーが出たときに直してもらう</span>
                     <button class="copy-btn" onclick="copyCode(this)">コピー</button>
                   </div>
                   <pre class="prompt-pre">GASのコードを実行したら、以下のエラーが出ました。原因と直し方を教えてください。
@@ -3692,6 +3660,16 @@
                         Geminiに貼り付け</span><br>
                       <span style="color:var(--purple);font-weight:700;">Windows：Win + Shift + S → ドラッグで範囲選択 →
                         Geminiに貼り付け</span>
+                    </span>
+                  </div>
+                </div>
+                <div class="notice" style="border-color:rgba(217,119,6,0.35);background:rgba(217,119,6,0.08);margin-top:10px;">
+                  <div class="ni-wrap" style="background:#d97706;">⚠️</div>
+                  <div>
+                    <strong>個人情報・機密情報は貼り付けないようにしましょう</strong><br>
+                    <span style="font-size:13px;line-height:1.8;">
+                      エラー文・コード・スクリーンショットをAIに送る前に、氏名、メールアドレス、顧客情報、社内URL、APIキーなどが含まれていないか確認してください。
+                      含まれている場合は、削除するか「〇〇」「xxxxx」などの伏せ字に置き換えましょう。
                     </span>
                   </div>
                 </div>
