@@ -2717,7 +2717,7 @@
         </div>
         <div class="nav-section">
           <div class="nav-section-label">提出 &amp; 共有</div>
-          <a class="nav-link" href="#submit" data-requires-completion><span class="nav-dot"></span>作品を提出する</a>
+          <a class="nav-link" href="#submit"><span class="nav-dot"></span>作品を提出する</a>
         </div>
         <div class="nav-section">
           <div class="nav-section-label">発展</div>
@@ -3781,12 +3781,7 @@
         </div>
       </section>
 
-      <div class="completion-gate" id="completion-gate">
-        <strong>提出 &amp; 発展は、全11ステップ完了後に開きます</strong>
-        <p id="completion-gate-message">完了ボタンを押して進めてください。残り 11 ステップです。</p>
-      </div>
-
-      <section class="submit-section locked-content" id="submit">
+      <section class="submit-section" id="submit">
         <span class="submit-eyebrow">Submit & Share</span>
         <h2 class="submit-title">完成したダッシュボードを提出する</h2>
         <p class="submit-sub">
@@ -3858,6 +3853,10 @@
         </div>
       </section>
 
+      <div class="completion-gate" id="completion-gate">
+        <strong>発展コンテンツは、全11ステップ完了後に開きます</strong>
+        <p id="completion-gate-message">完了ボタンを押して進めてください。残り 11 ステップです。</p>
+      </div>
 
       <!-- Section 4: 発展 -->
       <section class="section locked-content" id="advanced">
@@ -4617,7 +4616,7 @@
       });
     });
 
-    if (completedSteps < TOTAL_STEPS && ['#submit', '#advanced', '#adv-mail', '#adv-calendar', '#adv-clasp'].includes(location.hash)) {
+    if (completedSteps < TOTAL_STEPS && ['#advanced', '#adv-mail', '#adv-calendar', '#adv-clasp'].includes(location.hash)) {
       history.replaceState(null, '', location.pathname + location.search);
     }
 
