@@ -4347,6 +4347,17 @@
       } catch (e) { /* サイレント失敗 */ }
     }
 
+    // 発展セクションまで到達した参加者を1回だけ記録
+    const advancedSection = document.getElementById('advanced');
+    if (advancedSection && 'IntersectionObserver' in window) {
+      const advancedObserver = new IntersectionObserver((entries, observer) => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        trackStep('advanced');
+        observer.disconnect();
+      }, { threshold: 0.25 });
+      advancedObserver.observe(advancedSection);
+    }
+
     // ── 作品提出 & ギャラリー ──
 
     function submitWork(ev) {
