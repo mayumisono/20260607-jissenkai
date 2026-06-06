@@ -1296,6 +1296,163 @@
       font-size: 14px;
     }
 
+    .idea-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .idea-card {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: var(--r);
+      padding: 16px 12px;
+      text-align: center;
+    }
+
+    .idea-card .idea-icon {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .idea-card strong {
+      display: block;
+      color: var(--ink);
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .idea-card span {
+      color: var(--ink-m);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .gems-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px 24px;
+      margin: 20px 0;
+      border-radius: var(--r-lg);
+      background: linear-gradient(135deg, #18112b, #30205a);
+      color: #fff;
+      box-shadow: 0 10px 28px rgba(48, 32, 90, 0.18);
+    }
+
+    .gems-cta strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .gems-cta p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .gems-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      min-width: 190px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: #fff;
+      color: #5b21b6;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .gems-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 20px 0;
+    }
+
+    .course-card {
+      border: 1px solid var(--rule);
+      border-radius: var(--r-lg);
+      padding: 22px;
+      background: var(--paper);
+    }
+
+    .course-card.recommended {
+      border-color: rgba(124, 58, 237, 0.35);
+      background: var(--purple-9);
+    }
+
+    .course-tag {
+      display: inline-block;
+      padding: 3px 9px;
+      margin-bottom: 10px;
+      border-radius: 999px;
+      background: var(--cream);
+      color: var(--ink-m);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .course-card.recommended .course-tag {
+      background: rgba(124, 58, 237, 0.12);
+      color: var(--purple);
+    }
+
+    .course-card h4 {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 16px;
+    }
+
+    .course-card p {
+      margin: 0 0 12px;
+      color: var(--ink-s);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .course-card ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--ink-s);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    @media(max-width:900px) {
+      .idea-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .course-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .gems-cta {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .gems-button {
+        width: 100%;
+      }
+    }
+
     /* ── Step indicator (Part 2) ── */
     .step-indicator {
       display: flex;
@@ -2711,13 +2868,13 @@
           <a class="nav-link" href="#p1s4"><span class="nav-dot"></span>Step 4 ブラウザに表示</a>
         </div>
         <div class="nav-section">
-          <div class="nav-section-label">Section 3 — Part 2 本番（55分）</div>
+          <div class="nav-section-label">Section 3 — Part 2 本番（65分）</div>
           <a class="nav-link" href="#p2s1"><span class="nav-dot"></span>Step 1 テンプレをコピー</a>
           <a class="nav-link" href="#p2s2"><span class="nav-dot"></span>Step 2 コードを確認</a>
           <a class="nav-link" href="#p2s3"><span class="nav-dot"></span>Step 3 デプロイ</a>
           <a class="nav-link" href="#p2s4"><span class="nav-dot"></span>Step 4 動作確認</a>
-          <a class="nav-link" href="#p2s5"><span class="nav-dot"></span>Step 5 業務マッピング</a>
-          <a class="nav-link" href="#p2s6"><span class="nav-dot"></span>Step 6 カスタマイズ</a>
+          <a class="nav-link" href="#p2s5"><span class="nav-dot"></span>Step 5 作るものを決める</a>
+          <a class="nav-link" href="#p2s6"><span class="nav-dot"></span>Step 6 自分用ツール作成</a>
           <a class="nav-link" href="#p2s7"><span class="nav-dot"></span>Step 7 自動更新を体験</a>
         </div>
         <div class="nav-section">
@@ -2787,14 +2944,12 @@
               <div class="sd-icon">📊</div>
               <div class="sd-title">データをWebで見える化</div>
               <div class="sd-desc">スプレッドシートのアンケート結果を、URLを開くだけで誰でも見られるダッシュボードにする</div>
-              <div class="sd-key">SpreadsheetApp + doGet + HtmlService</div>
             </div>
             <div class="sd-item extra">
               <div class="sd-tag extra-tag">発展</div>
               <div class="sd-icon">✉️</div>
               <div class="sd-title">お礼メールを自動送信</div>
               <div class="sd-desc">スプレッドシートのメールアドレス一覧に、1行のコードでまとめてメールを送れる</div>
-              <div class="sd-key">MailApp.sendEmail()</div>
             </div>
           </div>
         </div>
@@ -3351,7 +3506,7 @@
           <div class="section-num-ghost">03</div>
           <span class="section-tag purple">Section 3</span>
           <h2 class="section-title">Part 2　メインハンズオン</h2>
-          <span class="section-time">55 min</span>
+          <span class="section-time">65 min</span>
         </div>
         <p class="body">テンプレートを使って、アンケートダッシュボードを完成させましょう。コードは2箇所書き換えるだけで、自分の業務に転用できます。</p>
 
@@ -3374,11 +3529,11 @@
           </div>
           <div class="si-item">
             <div class="si-dot" id="si5">5</div>
-            <div class="si-label">業務<br />マッピング</div>
+            <div class="si-label">作るもの<br />決定</div>
           </div>
           <div class="si-item">
             <div class="si-dot" id="si6">6</div>
-            <div class="si-label">カスタ<br />マイズ</div>
+            <div class="si-label">自分用<br />ツール作成</div>
           </div>
           <div class="si-item">
             <div class="si-dot" id="si7">7</div>
@@ -3507,29 +3662,44 @@
         <div class="step-block purple-accent fade-up" id="p2s5">
           <div class="step-header">
             <div class="step-num purple">5</div>
-            <div class="step-title">業務マッピングワーク</div>
-            <span class="step-time">5 min</span>
+            <div class="step-title">作りたい見える化ツールを決める</div>
+            <span class="step-time">10 min</span>
           </div>
           <div class="step-body">
             <div class="step-why"><span
-                class="sw-icon">🎯</span><span>「動かせた」で終わらせないために。自分の業務での使いどころを言語化することで、明日から使えるイメージが生まれます。</span></div>
-            <p class="step-desc">「動かせた！」を「使えるものに変える」ために、自分の業務での使いどころを書き出してみましょう。</p>
+                class="sw-icon">🎯</span><span>今作ったアンケートダッシュボードの基本構造は、<strong>シートからデータを取得 → 集計 → グラフや一覧で表示</strong>です。この構造はさまざまな業務に応用できます。</span></div>
+            <p class="step-desc">アンケートに限らず、日々スプレッドシートで管理している情報を思い浮かべてみましょう。</p>
+            <div class="idea-grid">
+              <div class="idea-card"><span class="idea-icon">📝</span><strong>アンケート</strong><span>回答数・平均点・コメント</span></div>
+              <div class="idea-card"><span class="idea-icon">💰</span><strong>売上・実績</strong><span>合計・担当者別・推移</span></div>
+              <div class="idea-card"><span class="idea-icon">✅</span><strong>タスク・進捗</strong><span>未着手・進行中・期限</span></div>
+              <div class="idea-card"><span class="idea-icon">🎟️</span><strong>イベント</strong><span>申込数・参加状況・属性</span></div>
+              <div class="idea-card"><span class="idea-icon">💬</span><strong>問い合わせ</strong><span>件数・対応状況・担当者</span></div>
+            </div>
+            <div class="gems-cta">
+              <div>
+                <strong>何を作ればいいか迷ったら、Gemsと一緒に決めよう</strong>
+                <p>選択肢に答えるだけで、作りたいもの・必要な列・集計・グラフを整理し、最後にスプレッドシートと連動するコードまで作成します。</p>
+              </div>
+              <a class="gems-button" href="https://gemini.google.com/gem/14dztgvsKbgTzEwQfVzfR0ejVn3QqWES1?usp=sharing"
+                target="_blank" rel="noopener">✨ 見える化Gemsを開く ↗</a>
+            </div>
             <div class="mapping-form">
               <div class="mf-header">
-                <div class="mf-label">MY USE CASE — 自分の業務への紐付け</div>
+                <div class="mf-label">MY TOOL IDEA — 作りたいものを一言で整理</div>
               </div>
               <div class="mf-body">
                 <div class="mapping-field">
-                  <label>使いたいシーン</label>
-                  <input class="field-line" type="text" placeholder="例：毎月の顧客満足度アンケートの結果を可視化したい" />
+                  <label>何を見える化したい？</label>
+                  <input class="field-line" type="text" placeholder="例：チームのタスク進捗をひと目で確認したい" />
                 </div>
                 <div class="mapping-field">
-                  <label>集めたいデータ（列名）</label>
-                  <input class="field-line" type="text" placeholder="例：日付・担当者・満足度スコア・改善要望" />
+                  <label>スプレッドシートに入れる項目は？</label>
+                  <input class="field-line" type="text" placeholder="例：タスク名・担当者・ステータス・期限" />
                 </div>
                 <div class="mapping-field">
-                  <label>見せたい相手</label>
-                  <input class="field-line" type="text" placeholder="例：チームリーダー・上長・プロジェクトメンバー" />
+                  <label>どんな数字やグラフが見たい？</label>
+                  <input class="field-line" type="text" placeholder="例：進行中の件数・担当者別のタスク数・期限切れ一覧" />
                 </div>
               </div>
             </div>
@@ -3540,24 +3710,67 @@
         <div class="step-block purple-accent fade-up" id="p2s6">
           <div class="step-header">
             <div class="step-num purple">6</div>
-            <div class="step-title">変更マップ2箇所を書き換えてカスタマイズ</div>
-            <span class="step-time">15 min</span>
+            <div class="step-title">自分用の見える化ツールを作る</div>
+            <span class="step-time">20 min</span>
           </div>
           <div class="step-body">
-            <div class="step-why"><span class="sw-icon">🎯</span><span>Step
-                2で確認した2箇所を書き換えるだけ。これができれば、どんな業務のデータにも同じ仕組みが使えます。</span></div>
-            <p class="step-desc">Step 5で書き出した内容をもとに、変更マップの2箇所を自分の業務に合わせて書き換えましょう。</p>
-            <div class="notice" style="margin-bottom:16px;">
-              <div class="ni-wrap" style="background:var(--purple-gradient);">✨</div>
-              <span>2箇所以外も変えたい場合は、<strong>Geminiに任せましょう。</strong>コードをまるごとコピーしてプロンプトに貼るだけです。 → <a href="#gemini-prompts"
-                  style="color:var(--purple);font-weight:700;text-decoration:underline;">プロンプト集を開く ↓</a></span>
+            <div class="step-why"><span class="sw-icon">🎯</span><span>まずはテンプレートの2箇所を変えて構造をつかみます。もっと自由に作りたい人は、Gemsが作った完成コードへ進みましょう。</span></div>
+            <p class="step-desc">自分のやりたいことに合わせて、どちらかのコースを選んでください。</p>
+            <div class="course-grid">
+              <div class="course-card">
+                <span class="course-tag">COURSE A・基本を理解</span>
+                <h4>テンプレートをカスタマイズ</h4>
+                <p>アンケートダッシュボードの構造を活かし、表示するシートと列を変更します。</p>
+                <ol>
+                  <li><code>SHEET_NAME</code> を変更</li>
+                  <li><code>COLUMNS</code> を変更</li>
+                  <li>新バージョンで再デプロイ</li>
+                </ol>
+              </div>
+              <div class="course-card recommended">
+                <span class="course-tag">COURSE B・自由制作</span>
+                <h4>Gemsと新しいツールを作る</h4>
+                <p>売上、タスク、イベントなど、選んだ用途に合うCode.gsとindex.htmlをGemsに作ってもらいます。</p>
+                <ol>
+                  <li>Gemsの質問に答える</li>
+                  <li>Code.gsとindex.htmlを貼り替える</li>
+                  <li>新バージョンで再デプロイ</li>
+                </ol>
+              </div>
             </div>
             <div class="change-map">
-              <div class="cm-label">変更するのはこの2箇所だけ</div>
+              <div class="cm-label">COURSE A：変更するのはこの2箇所だけ</div>
               <div class="cm-list">
                 <div class="cm-item"><span class="cm-badge">①</span>SHEET_NAME を自分のシート名に変える</div>
                 <div class="cm-item"><span class="cm-badge">②</span>COLUMNS を自分の列名に変える</div>
               </div>
+            </div>
+            <div class="gems-cta">
+              <div>
+                <strong>COURSE Bはこちらから</strong>
+                <p>Gemsを開いたら、下の文章をコピーして最初に送ってください。</p>
+              </div>
+              <a class="gems-button" href="https://gemini.google.com/gem/14dztgvsKbgTzEwQfVzfR0ejVn3QqWES1?usp=sharing"
+                target="_blank" rel="noopener">✨ Gemsで自由制作する ↗</a>
+            </div>
+            <div class="code-wrap" style="margin-top:16px;">
+              <div class="code-header">
+                <div class="traffic-lights">
+                  <span class="tl tl-red"></span><span class="tl tl-yellow"></span><span class="tl tl-green"></span>
+                </div>
+                <span class="code-lang">GEMSへの最初の指示</span>
+                <button class="copy-btn" onclick="copyCode(this)">コピー</button>
+              </div>
+              <pre><code>Googleスプレッドシートの実データと連動する、業務の見える化ツールを作りたいです。
+
+質問を1つずつ、選択肢つきで進めてください。
+
+最後は見た目だけのHTMLではなく、必ず次の2ファイルをセットで作成してください。
+
+・Code.gs
+・index.html
+
+画面の件数やグラフは固定値にせず、スプレッドシートから取得したデータを使ってください。</code></pre>
             </div>
             <div class="notice" style="margin-top:18px;">
               <div class="ni-wrap">💡</div>
@@ -3773,10 +3986,10 @@
 
       <section class="submit-section" id="submit">
         <span class="submit-eyebrow">Submit & Share</span>
-        <h2 class="submit-title">完成したダッシュボードを提出する</h2>
+        <h2 class="submit-title">完成した見える化ツールを共有する</h2>
         <p class="submit-sub">
-          WebアプリURL をペーストするだけで、みんなのギャラリーに表示されます。<br>
-          ニックネームとコメントは任意。提出後にもう一度提出すれば上書きされます。
+          アンケート、売上、タスク、イベントなど、作ったWebアプリURLを共有しましょう。<br>
+          ほかの参加者の作品を見ると「こんなものも作れるのか！」という発見につながります。
         </p>
 
         <!-- 提出フォーム -->
@@ -3797,9 +4010,9 @@
           </div>
           <div class="submit-row">
             <label class="submit-label" for="subComment">
-              コメント <span class="opt">任意</span>
+              作品紹介 <span class="opt">任意</span>
             </label>
-            <textarea class="submit-textarea" id="subComment" placeholder="工夫したところ・つまずいたところ・感想など"
+            <textarea class="submit-textarea" id="subComment" placeholder="例：担当者別に進捗を確認できるタスク管理ツール。期限切れを赤く表示しました。"
               maxlength="200"></textarea>
           </div>
           <div class="submit-actions">
@@ -3823,7 +4036,7 @@
               <rect x="14" y="14" width="7" height="7" />
               <rect x="3" y="14" width="7" height="7" />
             </svg>
-            みんなの作品ギャラリー
+            みんなの見える化ツール
             <span class="gallery-count" id="galleryCount">0</span>
           </div>
           <button type="button" class="gallery-refresh" id="refreshBtn" onclick="loadGallery(true)">
@@ -3838,7 +4051,7 @@
         <div class="gallery-grid" id="galleryGrid">
           <div class="gallery-empty">
             <span class="emoji">🎨</span>
-            まだ提出がありません。最初の1人になりましょう！
+            まだ作品がありません。最初の作例を共有しましょう！
           </div>
         </div>
       </section>
@@ -4498,7 +4711,7 @@
 
       if (submissions.length === 0) {
         grid.innerHTML = '<div class="gallery-empty"><span class="emoji">🎨</span>'
-          + 'まだ提出がありません。最初の1人になりましょう！</div>';
+          + 'まだ作品がありません。最初の作例を共有しましょう！</div>';
         return;
       }
 
