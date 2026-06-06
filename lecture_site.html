@@ -3403,7 +3403,7 @@
               🔗 テンプレートスプレッドシートのURLをここに表示
             </div>
             <ol class="proc">
-              <li><span class="pnum purple">1</span>上のリンクを開く</li>
+              <li><span class="pnum purple">1</span>上の <strong>「スプレッドシートをコピー」</strong> をクリック</li>
               <li><span class="pnum purple">2</span>メニュー <strong>「ファイル」→「コピーを作成」</strong></li>
               <li><span class="pnum purple">3</span>名前はそのままでOK → <strong>「コピーを作成」</strong> をクリック</li>
               <li><span class="pnum purple">4</span>マイドライブにコピーが作成されたら完了</li>
@@ -4274,12 +4274,13 @@
         tEl.style.cursor = 'pointer';
         tEl.innerHTML = '<div class="url-pulse"></div>'
           + '<a href="' + TEMPLATE_SHEET_URL + '" target="_blank" rel="noopener" style="'
-          + 'color:#fff;text-decoration:none;font-weight:700;display:flex;'
-          + 'align-items:center;gap:8px;justify-content:center;">'
+          + 'color:#7C3AED;text-decoration:underline;text-decoration-thickness:2px;'
+          + 'text-underline-offset:5px;font-size:18px;font-weight:700;display:flex;'
+          + 'align-items:center;gap:8px;justify-content:center;width:100%;">'
           + '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">'
           + '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>'
           + '<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>'
-          + '</svg>🔗 テンプレートをマイドライブにコピーする</a>';
+          + '</svg>スプレッドシートをコピー</a>';
       }
     })();
 
