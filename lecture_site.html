@@ -1389,11 +1389,23 @@
       border-radius: var(--r-lg);
       padding: 22px;
       background: var(--paper);
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
     }
 
-    .course-card.recommended {
+    .course-card:hover {
+      transform: translateY(-2px);
       border-color: rgba(124, 58, 237, 0.35);
+      box-shadow: 0 8px 22px rgba(48, 32, 90, 0.1);
+    }
+
+    .course-card.active {
+      border: 2px solid var(--purple);
       background: var(--purple-9);
+      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.14);
     }
 
     .course-tag {
@@ -1408,30 +1420,71 @@
       letter-spacing: 0.08em;
     }
 
-    .course-card.recommended .course-tag {
+    .course-card.active .course-tag {
       background: rgba(124, 58, 237, 0.12);
       color: var(--purple);
     }
 
-    .course-card h4 {
+    .course-title {
+      display: block;
       margin: 0 0 8px;
       color: var(--ink);
       font-size: 16px;
+      font-weight: 700;
     }
 
-    .course-card p {
+    .course-desc {
+      display: block;
       margin: 0 0 12px;
       color: var(--ink-s);
       font-size: 13px;
       line-height: 1.7;
     }
 
-    .course-card ol {
-      margin: 0;
-      padding-left: 20px;
+    .course-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
       color: var(--ink-s);
       font-size: 13px;
-      line-height: 1.9;
+      line-height: 1.6;
+    }
+
+    .course-steps span::before {
+      content: '✓';
+      margin-right: 7px;
+      color: var(--purple);
+      font-weight: 700;
+    }
+
+    .course-panel {
+      display: none;
+      animation: coursePanelIn 0.25s ease;
+    }
+
+    .course-panel.active {
+      display: block;
+    }
+
+    .gems-cta.course-panel.active {
+      display: flex;
+    }
+
+    @keyframes coursePanelIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .gems-instruction pre,
+    .gems-instruction code {
+      color: #f8fafc;
     }
 
     @media(max-width:900px) {
@@ -3676,17 +3729,9 @@
               <div class="idea-card"><span class="idea-icon">🎟️</span><strong>イベント</strong><span>申込数・参加状況・属性</span></div>
               <div class="idea-card"><span class="idea-icon">💬</span><strong>問い合わせ</strong><span>件数・対応状況・担当者</span></div>
             </div>
-            <div class="gems-cta">
-              <div>
-                <strong>何を作ればいいか迷ったら、Gemsと一緒に決めよう</strong>
-                <p>選択肢に答えるだけで、作りたいもの・必要な列・集計・グラフを整理し、最後にスプレッドシートと連動するコードまで作成します。</p>
-              </div>
-              <a class="gems-button" href="https://gemini.google.com/gem/14dztgvsKbgTzEwQfVzfR0ejVn3QqWES1?usp=sharing"
-                target="_blank" rel="noopener">✨ 見える化Gemsを開く ↗</a>
-            </div>
             <div class="mapping-form">
               <div class="mf-header">
-                <div class="mf-label">MY TOOL IDEA — 作りたいものを一言で整理</div>
+                <div class="mf-label">まずは自分で考えてみよう — 作りたいものを一言で整理</div>
               </div>
               <div class="mf-body">
                 <div class="mapping-field">
@@ -3703,6 +3748,12 @@
                 </div>
               </div>
             </div>
+            <div class="gems-cta">
+              <div>
+                <strong>うまく思いつかなくても大丈夫</strong>
+                <p>空欄があっても、そのまま次へ進みましょう。Step 6のCOURSE Bでは、Gemの選択肢に答えながら、作りたいもの・必要な列・集計・グラフを一緒に整理できます。</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -3714,51 +3765,51 @@
             <span class="step-time">20 min</span>
           </div>
           <div class="step-body">
-            <div class="step-why"><span class="sw-icon">🎯</span><span>まずはテンプレートの2箇所を変えて構造をつかみます。もっと自由に作りたい人は、Gemsが作った完成コードへ進みましょう。</span></div>
-            <p class="step-desc">自分のやりたいことに合わせて、どちらかのコースを選んでください。</p>
+            <div class="step-why"><span class="sw-icon">🎯</span><span>自分のやりたいことに合わせてコースを選びます。選んだコースに必要な手順だけが下に表示されます。</span></div>
+            <p class="step-desc">まずはテンプレートを活かすCOURSE Aがおすすめです。大きく作り変えたい場合はCOURSE Bを選んでください。</p>
             <div class="course-grid">
-              <div class="course-card">
+              <button class="course-card active" type="button" data-course-button="a" aria-pressed="true">
                 <span class="course-tag">COURSE A・基本を理解</span>
-                <h4>テンプレートをカスタマイズ</h4>
-                <p>アンケートダッシュボードの構造を活かし、表示するシートと列を変更します。</p>
-                <ol>
-                  <li><code>SHEET_NAME</code> を変更</li>
-                  <li><code>COLUMNS</code> を変更</li>
-                  <li>新バージョンで再デプロイ</li>
-                </ol>
-              </div>
-              <div class="course-card recommended">
+                <span class="course-title">テンプレートをカスタマイズ</span>
+                <span class="course-desc">アンケートダッシュボードの構造を活かし、表示するシートと列を変更します。</span>
+                <span class="course-steps">
+                  <span><code>SHEET_NAME</code> を変更</span>
+                  <span><code>COLUMNS</code> を変更</span>
+                  <span>新バージョンで再デプロイ</span>
+                </span>
+              </button>
+              <button class="course-card" type="button" data-course-button="b" aria-pressed="false">
                 <span class="course-tag">COURSE B・自由制作</span>
-                <h4>Gemsと新しいツールを作る</h4>
-                <p>売上、タスク、イベントなど、選んだ用途に合うCode.gsとindex.htmlをGemsに作ってもらいます。</p>
-                <ol>
-                  <li>Gemsの質問に答える</li>
-                  <li>Code.gsとindex.htmlを貼り替える</li>
-                  <li>新バージョンで再デプロイ</li>
-                </ol>
-              </div>
+                <span class="course-title">Gemと新しいツールを作る</span>
+                <span class="course-desc">売上、タスク、イベントなど、選んだ用途に合うCode.gsとindex.htmlをGemに作ってもらいます。</span>
+                <span class="course-steps">
+                  <span>Gemの質問に答える</span>
+                  <span>Code.gsとindex.htmlを貼り替える</span>
+                  <span>新バージョンで再デプロイ</span>
+                </span>
+              </button>
             </div>
-            <div class="change-map">
+            <div class="change-map course-panel active" data-course-panel="a">
               <div class="cm-label">COURSE A：変更するのはこの2箇所だけ</div>
               <div class="cm-list">
                 <div class="cm-item"><span class="cm-badge">①</span>SHEET_NAME を自分のシート名に変える</div>
                 <div class="cm-item"><span class="cm-badge">②</span>COLUMNS を自分の列名に変える</div>
               </div>
             </div>
-            <div class="gems-cta">
+            <div class="gems-cta course-panel" data-course-panel="b">
               <div>
                 <strong>COURSE Bはこちらから</strong>
-                <p>Gemsを開いたら、下の文章をコピーして最初に送ってください。</p>
+                <p>Gemを開いたら、下の文章をコピーして最初に送ってください。</p>
               </div>
               <a class="gems-button" href="https://gemini.google.com/gem/14dztgvsKbgTzEwQfVzfR0ejVn3QqWES1?usp=sharing"
-                target="_blank" rel="noopener">✨ Gemsで自由制作する ↗</a>
+                target="_blank" rel="noopener">✨ Gemで自由制作する ↗</a>
             </div>
-            <div class="code-wrap" style="margin-top:16px;">
+            <div class="code-wrap gems-instruction course-panel" data-course-panel="b" style="margin-top:16px;">
               <div class="code-header">
                 <div class="traffic-lights">
                   <span class="tl tl-red"></span><span class="tl tl-yellow"></span><span class="tl tl-green"></span>
                 </div>
-                <span class="code-lang">GEMSへの最初の指示</span>
+                <span class="code-lang">Gemへの最初の指示</span>
                 <button class="copy-btn" onclick="copyCode(this)">コピー</button>
               </div>
               <pre><code>Googleスプレッドシートの実データと連動する、業務の見える化ツールを作りたいです。
@@ -3790,11 +3841,11 @@
               <span class="as">デプロイ</span>
             </div>
             <!-- Gemini プロンプト集（折りたたみ） -->
-            <details class="prompt-accordion" id="gemini-prompts">
+            <details class="prompt-accordion course-panel active" id="gemini-prompts" data-course-panel="a">
               <summary class="prompt-accordion-summary">
                 <span class="pa-icon">✨</span>
-                <span class="pa-title">Geminiプロンプト集を開く</span>
-                <span class="pa-badge">2つ</span>
+                <span class="pa-title">COURSE A用：Geminiプロンプト集を開く</span>
+                <span class="pa-badge">1つ</span>
                 <span class="pa-arrow">▼</span>
               </summary>
               <div class="pa-body">
@@ -3843,11 +3894,23 @@
 変更後の Code.gs を、そのままコピーして使える形で全文出力してください。</pre>
                 </div>
 
+              </div>
+            </details>
+            <details class="prompt-accordion" id="error-help">
+              <summary class="prompt-accordion-summary">
+                <span class="pa-icon">🛟</span>
+                <span class="pa-title">COURSE A・B共通：エラーが出たときはこちら</span>
+                <span class="pa-arrow">▼</span>
+              </summary>
+              <div class="pa-body">
+                <p style="font-size:13px;color:var(--ink-s);margin-bottom:16px;line-height:1.7;">
+                  どちらのコースでも、エラー文とコードをAIに渡すと原因と修正方法を相談できます。
+                </p>
                 <div class="prompt-wrap">
                   <div class="prompt-header">
                     <div class="prompt-dots"><span class="pd pd-r"></span><span class="pd pd-y"></span><span
                         class="pd pd-g"></span></div>
-                    <span class="prompt-label">② エラーが出たときに直してもらう</span>
+                    <span class="prompt-label">エラーが出たときに直してもらう</span>
                     <button class="copy-btn" onclick="copyCode(this)">コピー</button>
                   </div>
                   <pre class="prompt-pre">GASのコードを実行したら、以下のエラーが出ました。原因と直し方を教えてください。
@@ -3860,7 +3923,6 @@
 
 修正したコードも全文で出力してください。</pre>
                 </div>
-
                 <div class="notice"
                   style="border-color:rgba(139,92,246,0.35);background:var(--purple-9);margin-top:4px;">
                   <div class="ni-wrap">📸</div>
@@ -4474,6 +4536,23 @@
           + '</svg>スプレッドシートをコピー</a>';
       }
     })();
+
+    // ── Course selector ──
+    function selectCourse(course) {
+      document.querySelectorAll('[data-course-button]').forEach(button => {
+        const isActive = button.dataset.courseButton === course;
+        button.classList.toggle('active', isActive);
+        button.setAttribute('aria-pressed', String(isActive));
+      });
+
+      document.querySelectorAll('[data-course-panel]').forEach(panel => {
+        panel.classList.toggle('active', panel.dataset.coursePanel === course);
+      });
+    }
+
+    document.querySelectorAll('[data-course-button]').forEach(button => {
+      button.addEventListener('click', () => selectCourse(button.dataset.courseButton));
+    });
 
     // ── Copy button ──
     function copyCode(btn) {
