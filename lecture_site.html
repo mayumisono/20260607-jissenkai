@@ -208,6 +208,12 @@
       background: rgba(255, 255, 255, 0.35);
     }
 
+    .nav-link.is-locked,
+    .mobile-nav a.is-locked {
+      opacity: 0.38;
+      cursor: not-allowed;
+    }
+
     .nav-time {
       margin-left: auto;
       font-size: 10.5px;
@@ -1588,6 +1594,31 @@
       background: var(--brand-gradient);
     }
 
+    .completion-gate {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(3, 149, 120, 0.08));
+      border: 1px solid rgba(124, 58, 237, 0.22);
+      border-radius: var(--r-lg);
+      padding: 32px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .completion-gate strong {
+      display: block;
+      color: var(--ink);
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .completion-gate p {
+      color: var(--ink-s);
+      margin: 0;
+    }
+
+    .locked-content {
+      display: none;
+    }
+
     .submit-eyebrow {
       display: inline-block;
       font-family: 'JetBrains Mono', monospace;
@@ -2639,7 +2670,7 @@
     <a href="#gas">GASとは</a>
     <a href="#part1">Part 1</a>
     <a href="#part2">Part 2</a>
-    <a href="#advanced">発展</a>
+    <a href="#advanced" data-requires-completion>発展</a>
   </nav>
 
   <div class="layout">
@@ -2686,14 +2717,14 @@
         </div>
         <div class="nav-section">
           <div class="nav-section-label">提出 &amp; 共有</div>
-          <a class="nav-link" href="#submit"><span class="nav-dot"></span>作品を提出する</a>
+          <a class="nav-link" href="#submit" data-requires-completion><span class="nav-dot"></span>作品を提出する</a>
         </div>
         <div class="nav-section">
           <div class="nav-section-label">発展</div>
-          <a class="nav-link" href="#advanced"><span class="nav-dot"></span>もっとできること</a>
-          <a class="nav-link" href="#adv-mail"><span class="nav-dot"></span>メール自動送信</a>
-          <a class="nav-link" href="#adv-calendar"><span class="nav-dot"></span>カレンダー連携</a>
-          <a class="nav-link" href="#adv-clasp"><span class="nav-dot"></span>Tips</a>
+          <a class="nav-link" href="#advanced" data-requires-completion><span class="nav-dot"></span>もっとできること</a>
+          <a class="nav-link" href="#adv-mail" data-requires-completion><span class="nav-dot"></span>メール自動送信</a>
+          <a class="nav-link" href="#adv-calendar" data-requires-completion><span class="nav-dot"></span>カレンダー連携</a>
+          <a class="nav-link" href="#adv-clasp" data-requires-completion><span class="nav-dot"></span>Tips</a>
         </div>
       </nav>
       <div class="sidebar-footer">
@@ -3750,7 +3781,12 @@
         </div>
       </section>
 
-      <section class="submit-section" id="submit">
+      <div class="completion-gate" id="completion-gate">
+        <strong>提出 &amp; 発展は、全11ステップ完了後に開きます</strong>
+        <p id="completion-gate-message">完了ボタンを押して進めてください。残り 11 ステップです。</p>
+      </div>
+
+      <section class="submit-section locked-content" id="submit">
         <span class="submit-eyebrow">Submit & Share</span>
         <h2 class="submit-title">完成したダッシュボードを提出する</h2>
         <p class="submit-sub">
@@ -3824,7 +3860,7 @@
 
 
       <!-- Section 4: 発展 -->
-      <section class="section" id="advanced">
+      <section class="section locked-content" id="advanced">
         <div class="section-header">
           <div class="section-num-ghost">04</div>
           <span class="section-tag" style="background:linear-gradient(135deg,var(--purple),#A78BFA);">発展</span>
@@ -4517,7 +4553,12 @@
     // ── Gamification ──
 
     const TOTAL_STEPS = 11;
-    let completedSteps = 0;
+    const COMPLETED_STEPS_KEY = 'gas_workshop_completed_steps_2026';
+    let completedStepIds = new Set();
+    try {
+      completedStepIds = new Set(JSON.parse(localStorage.getItem(COMPLETED_STEPS_KEY) || '[]'));
+    } catch (_) {}
+    let completedSteps = completedStepIds.size;
 
     // 紙吹雪キャンバスを追加
     const canvas = document.createElement('canvas');
@@ -4544,6 +4585,40 @@
       const pct = (completedSteps / TOTAL_STEPS) * 100;
       document.getElementById('progress-bar').style.width = pct + '%';
       document.getElementById('progress-label').textContent = completedSteps + ' / ' + TOTAL_STEPS;
+      updateCompletionGate();
+    }
+
+    function updateCompletionGate() {
+      const unlocked = completedSteps >= TOTAL_STEPS;
+      const gate = document.getElementById('completion-gate');
+      const message = document.getElementById('completion-gate-message');
+      const lockedLinks = document.querySelectorAll('[data-requires-completion]');
+
+      document.querySelectorAll('.locked-content').forEach(el => {
+        el.style.display = unlocked ? '' : 'none';
+      });
+      if (gate) gate.style.display = unlocked ? 'none' : '';
+      if (message && !unlocked) {
+        message.textContent = '完了ボタンを押して進めてください。残り '
+          + Math.max(0, TOTAL_STEPS - completedSteps) + ' ステップです。';
+      }
+      lockedLinks.forEach(link => {
+        link.classList.toggle('is-locked', !unlocked);
+        link.setAttribute('aria-disabled', unlocked ? 'false' : 'true');
+      });
+    }
+
+    document.querySelectorAll('[data-requires-completion]').forEach(link => {
+      link.addEventListener('click', (event) => {
+        if (completedSteps >= TOTAL_STEPS) return;
+        event.preventDefault();
+        document.getElementById('completion-gate').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showToast('まだロック中です', '先に全11ステップの完了ボタンを押してください');
+      });
+    });
+
+    if (completedSteps < TOTAL_STEPS && ['#submit', '#advanced', '#adv-mail', '#adv-calendar', '#adv-clasp'].includes(location.hash)) {
+      history.replaceState(null, '', location.pathname + location.search);
     }
 
     // 紙吹雪（軽量版）
@@ -4618,12 +4693,19 @@
         const btn = document.createElement('button');
         btn.className = 'complete-btn';
         btn.innerHTML = `<span class="cb-icon">○</span> このステップを完了する`;
+        if (completedStepIds.has(block.id)) {
+          btn.classList.add('done');
+          btn.innerHTML = `<span class="cb-icon">✓</span> 完了！`;
+          block.classList.add('completed');
+        }
         btn.addEventListener('click', () => {
           if (btn.classList.contains('done')) return;
           btn.classList.add('done');
           btn.innerHTML = `<span class="cb-icon">✓</span> 完了！`;
           block.classList.add('completed');
-          completedSteps++;
+          completedStepIds.add(block.id);
+          completedSteps = completedStepIds.size;
+          localStorage.setItem(COMPLETED_STEPS_KEY, JSON.stringify([...completedStepIds]));
           updateProgress();
           trackStep(block.id);
 
