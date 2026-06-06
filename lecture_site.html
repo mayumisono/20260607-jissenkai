@@ -4606,7 +4606,7 @@
       const lockedLinks = document.querySelectorAll('[data-requires-completion]');
 
       document.querySelectorAll('.locked-content').forEach(el => {
-        el.style.display = unlocked ? '' : 'none';
+        el.classList.toggle('locked-content', !unlocked);
       });
       if (gate) gate.style.display = unlocked ? 'none' : '';
       lockedLinks.forEach(link => {
